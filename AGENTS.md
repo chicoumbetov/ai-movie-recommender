@@ -36,6 +36,18 @@ phase. State what you worked out before building on it.
   or call `kino_probe.py`; it is an internal probe.
 - Do not adjust code to the autocheck's random values and do not weaken tests to pass.
 
+## Commands
+
+```bash
+uv sync --frozen
+uv run pytest -q
+uv run check.py
+uv run show.py
+uv run kino.py "..."
+uv run python -m movie_bluff_ai_bot
+uv run pre-commit run --all-files
+```
+
 ## Working cycle
 
 1. Write or update a failing test for one `SPEC.md` criterion.

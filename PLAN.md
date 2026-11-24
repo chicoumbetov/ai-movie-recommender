@@ -26,7 +26,7 @@
   - Test: `tests/test_config.py` reads `pyproject.toml` via `tomllib` and checks `pythonpath`, dev group and `requires-python >= 3.12`. `tests/conftest.py` — fixtures: catalog of 4 films with string ids, catalog with int ids, fake client factory.
   - Done: `uv run pytest -q`; commit `chore: add spec baseline, pytest config and dev deps`.
 
-- [ ] **Step 2. Process files**
+- [x] **Step 2. Process files**
   - Do: `opencode.jsonc` (deny `--no-verify` and reading `.env`, except `.env.example`).
   - Test: `tests/test_process.py` — `AGENTS.md` and `PLAN.md` exist; in `AGENTS.md` there are commands `uv sync --frozen`, `uv run pytest -q`, `uv run check.py`, `uv run show.py` and prohibitions; in `PLAN.md` there are `- [ ]`; `opencode.jsonc` contains the required denies.
   - Done: `uv run pytest -q`; commit `docs: add agent workflow and plan`.
