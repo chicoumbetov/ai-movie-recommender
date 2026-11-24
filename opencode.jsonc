@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Never commit .env, keys, tokens or secrets. Never paste them into chat,
+  // issues, README, logs or screenshots. .env.example contains placeholders only.
+  "permissions": [
+    { "action": "shell", "resource": "*--no-verify*", "effect": "deny" },
+    { "action": "read", "resource": "*.env", "effect": "deny" },
+    { "action": "read", "resource": "*.env.*", "effect": "deny" },
+    // Still allow reading safe template files
+    { "action": "read", "resource": "*.env.example", "effect": "allow" },
+  ],
+  "mcp": {
+    "servers": {
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp",
+        "oauth": false,
+      },
+    },
+  },
+}
