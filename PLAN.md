@@ -90,7 +90,7 @@
   - Test: `tests/test_pick_invalid.py` — each case, `ids` empty for all outcomes except `ok`.
   - Done: `uv run pytest -q`; commit `feat: id and status validation`.
 
-- [ ] **Step 14. `pick`: model errors**
+- [x] **Step 14. `pick`: model errors**
   - Do: `refusal` → `refusal`; `finish_reason=length` → `length`; `APIConnectionError`/`APITimeoutError` → `no_connection`; `APIStatusError` → `error_<code>`; unexpected exception → `invalid` + diagnostic in stderr, process doesn't crash. Same for filter-stage.
   - Test: `tests/test_pick_errors.py` — all outcomes, journal writes and on errors.
   - Done: `uv run pytest -q`; commit `feat: map model failures to outcomes`.

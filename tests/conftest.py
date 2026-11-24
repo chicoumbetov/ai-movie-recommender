@@ -75,9 +75,10 @@ def _result(
     *,
     finish_reason: str = "stop",
     usage: FakeUsage | None = None,
+    refusal: str | None = None,
 ) -> FakeParseResult:
     usage = usage or FakeUsage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
-    message = SimpleNamespace(parsed=parsed, refusal=None, content=None)
+    message = SimpleNamespace(parsed=parsed, refusal=refusal, content=None)
     return FakeParseResult(
         id="chatcmpl-fake",
         model="fake-model",
@@ -109,6 +110,7 @@ class FakeCompletions:
                 response["parsed"],
                 finish_reason=response.get("finish_reason", "stop"),
                 usage=response.get("usage"),
+                refusal=response.get("refusal"),
             )
         return _result(response)
 

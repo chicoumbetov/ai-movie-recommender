@@ -9,10 +9,18 @@ from __future__ import annotations
 import html
 import json
 import re
+import sys
 import time
 from pathlib import Path
 from typing import Any
 
+from openai import (
+    APIConnectionError,
+    APIStatusError,
+    APITimeoutError,
+    ContentFilterFinishReasonError,
+    LengthFinishReasonError,
+)
 from pydantic import ValidationError
 
 from schemas import Filters, Selection
@@ -334,6 +342,44 @@ def _print_film(film: dict[str, Any], why: str) -> None:
     print()
 
 
+def _call_model(
+    client: Any,
+    model: str,
+    messages: list[dict[str, str]],
+    response_format: Any,
+) -> tuple[Any | None, str]:
+    """Make one parse call and map transport, refusal and truncation to outcomes."""
+    try:
+        completion = client.chat.completions.parse(
+            model=model,
+            messages=messages,
+            response_format=response_format,
+        )
+    except APITimeoutError:
+        return (None, "no_connection")
+    except APIConnectionError:
+        return (None, "no_connection")
+    except APIStatusError as error:
+        return (None, f"error_{error.status_code}")
+    except (LengthFinishReasonError, ContentFilterFinishReasonError):
+        return (None, "length")
+    except ValidationError:
+        return (None, "invalid")
+    except Exception as error:  # noqa: BLE001 - the process must never crash here
+        print(
+            f"warning: unexpected model error: {type(error).__name__}: {error}",
+            file=sys.stderr,
+        )
+        return (None, "invalid")
+
+    choice = completion.choices[0]
+    if getattr(choice.message, "refusal", None):
+        return (completion, "refusal")
+    if choice.finish_reason == "length":
+        return (completion, "length")
+    return (completion, "ok")
+
+
 def pick(
     client: Any,
     model: str,
@@ -352,21 +398,26 @@ def pick(
     catalog_ids = [film["id"] for film in films]
     filter_request = {"query": query, "ids": catalog_ids}
     filter_started = time.time()
-    filter_completion = client.chat.completions.parse(
-        model=model,
-        messages=build_filter_messages(films, query),
-        response_format=Filters,
+    filter_completion, filter_outcome = _call_model(
+        client,
+        model,
+        build_filter_messages(films, query),
+        Filters,
     )
-    filters = filter_completion.choices[0].message.parsed
+    filters = filter_completion.choices[0].message.parsed if filter_completion is not None else None
+    if filter_outcome == "ok" and filters is None:
+        filter_outcome = "invalid"
     log(
         model=model,
         request=filter_request,
-        outcome="ok",
+        outcome=filter_outcome,
         step="filters",
         started=filter_started,
         completion=filter_completion,
         path=journal_path,
     )
+    if filter_outcome != "ok":
+        return (filter_outcome, [])
 
     candidates = apply_filters(films, filters)
     if not candidates:
@@ -375,24 +426,25 @@ def pick(
 
     choice_request = {"query": query, "ids": [film["id"] for film in candidates]}
     choice_started = time.time()
-    try:
-        completion = client.chat.completions.parse(
-            model=model,
-            messages=build_messages(candidates, query),
-            response_format=Selection,
-        )
-        selection = completion.choices[0].message.parsed
-    except ValidationError:
+    completion, model_outcome = _call_model(
+        client,
+        model,
+        build_messages(candidates, query),
+        Selection,
+    )
+    if model_outcome != "ok":
         log(
             model=model,
             request=choice_request,
-            outcome="invalid",
+            outcome=model_outcome,
             step="choice",
             started=choice_started,
+            completion=completion,
             path=journal_path,
         )
-        return ("invalid", [])
+        return (model_outcome, [])
 
+    selection = completion.choices[0].message.parsed
     outcome, resolved, rejected = _validate_choice(selection, candidates)
     log(
         model=model,
