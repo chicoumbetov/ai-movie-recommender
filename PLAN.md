@@ -146,7 +146,7 @@
   - Test: `tests/test_state.py` — roundtrip, restart, broken file, atomic (tmp removed), no secrets.
   - Done: `uv run pytest -q`; commit `feat: persistent bot state`.
 
-- [ ] **Step 24. Telegram**
+- [x] **Step 24. Telegram**
   - Do: `movie_bluff_ai_bot/telegram.py` — env, aiogram `Bot` with the session from `SPEC.md` §11, `Dispatcher` long polling, `sendMessage` split 4096, HTML escape, `callback_data` allowlist, no webhook, token not logged; aiogram retries `429`/`5xx`/network — the bot must not crash.
   - Test: `tests/test_bot_transport.py` — fake transport, `429`/`5xx`/network, split, escape, allowlist.
   - Done: `uv run pytest -q`; commit `feat: telegram transport`.
