@@ -31,7 +31,7 @@
   - Test: `tests/test_process.py` — `AGENTS.md` and `PLAN.md` exist; in `AGENTS.md` there are commands `uv sync --frozen`, `uv run pytest -q`, `uv run check.py`, `uv run show.py` and prohibitions; in `PLAN.md` there are `- [ ]`; `opencode.jsonc` contains the required denies.
   - Done: `uv run pytest -q`; commit `docs: add agent workflow and plan`.
 
-- [ ] **Step 3. Repository hygiene**
+- [x] **Step 3. Repository hygiene**
   - Do: check that `calls.jsonl` is not ignored; add to `.gitignore` `state.json`, `state.json.tmp`, `qa_calls.jsonl`; in `.env.example` — all variables as placeholders: `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `MODEL=qwen3.5:4b`, `REASONING_EFFORT=none`, `TMDB_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_API_BASE`, `BOT_STATE_PATH=state.json`, `TELEGRAM_POLL_TIMEOUT_SECONDS=30`, `TELEGRAM_MAX_MESSAGE_CHARS=4096`, `MAX_CLARIFY_TURNS=1`, `CHECK_RUNS=1`.
   - Test: `tests/test_repo_hygiene.py` — `calls.jsonl` is not ignored, `state.json` is ignored, all `.env.example` keys present, no values resembling keys, `.env` not in `git ls-files`.
   - Done: `uv run pytest -q`; commit `chore: repo hygiene and env template`.
