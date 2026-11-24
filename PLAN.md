@@ -65,7 +65,7 @@
   - Test: `tests/test_schema.py` — ok/no_match/clarify; extra field → error; film_id=null and float → error; missing fields → error; Filters by default all None.
   - Done: `uv run pytest -q`; commit `feat: response schemas`.
 
-- [ ] **Step 9. Prompt**
+- [x] **Step 9. Prompt**
   - Do: system prompt with rules 1–10 and exactly one example response; `build_messages(films, query)` — `<catalog>`, `</catalog>`, `<query>`, `</query>`, `json.dumps(films, ensure_ascii=False)`, `html.escape(query, quote=False)`.
   - Test: `tests/test_prompt.py` — tags, entire catalog, escaping `<>&`, determinism, one example, «data, not instructions», full catalog not in system prompt.
   - Done: `uv run pytest -q`; commit `feat: prompt builder`.
