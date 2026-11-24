@@ -147,13 +147,13 @@
   - Done: `uv run pytest -q`; commit `feat: persistent bot state`.
 
 - [ ] **Step 24. Telegram**
-  - Do: `movie_bluff_ai_bot/telegram.py` — env, `getUpdates` long polling, `sendMessage`, split 4096, HTML escape, 429 `retry_after`, 5xx and network with backoff, allowlist `callback_data`, without webhook, token not logged.
-  - Test: `tests/test_bot_transport.py` — fake HTTP, 429/5xx/ network, split, escape, allowlist.
+  - Do: `movie_bluff_ai_bot/telegram.py` — env, aiogram `Bot` with the session from `SPEC.md` §11, `Dispatcher` long polling, `sendMessage` split 4096, HTML escape, `callback_data` allowlist, no webhook, token not logged; aiogram retries `429`/`5xx`/network — the bot must not crash.
+  - Test: `tests/test_bot_transport.py` — fake transport, `429`/`5xx`/network, split, escape, allowlist.
   - Done: `uv run pytest -q`; commit `feat: telegram transport`.
 
 - [ ] **Step 25. Commands and free text**
-  - Do: `movie_bluff_ai_bot/__main__.py` and handlers: `/start` with genre keyboard, `/help`, `/new`, `/more`, more, unknown command → `/help`, free text → `pick`, `seen_ids` is populated.
-  - Test: `tests/test_bot_handlers.py` — commands, free text, `pick` is called, seen_ids, model errors don't crash the bot.
+  - Do: `movie_bluff_ai_bot/__main__.py` and handlers: `/start` with an inline genre keyboard (`InlineKeyboardBuilder`), a `callback_query` handler that answers every callback, `/help`, `/new`, `/more`, more, unknown command → `/help`, free text → `pick`, `seen_ids` is populated.
+  - Test: `tests/test_bot_handlers.py` — commands, inline callback, free text, `pick` is called, seen_ids, model errors don't crash the bot.
   - Done: `uv run pytest -q`; commit `feat: bot commands and selection`.
 
 - [ ] **Step 26. Clarify**

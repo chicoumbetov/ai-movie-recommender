@@ -146,6 +146,12 @@ uses only the candidates. [A]
 Telegram bot: `uv run python -m movie_bluff_ai_bot`; a thin adapter over `pick`, long polling,
 no webhook. [A]
 
+- Choices are aiogram inline keyboards (`InlineKeyboardMarkup`, built with
+  `InlineKeyboardBuilder`); button payloads never carry the query text. [P]
+- `TELEGRAM_API_BASE` sets the Bot API host:
+  `AiohttpSession(api=TelegramAPIServer.from_base(base))`, `is_local=True` for a local server;
+  unset → `https://api.telegram.org`. [P]
+
 - `/start`, `/help`, `/new`, `/more` and “ещё”; free text goes to `pick`; unknown command →
   `/help`. [P]
 - `clarify`: one question, pending state, merge the answer with `last_query`, limit
