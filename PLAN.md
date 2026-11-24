@@ -112,7 +112,7 @@
   - Test: `tests/test_cli.py` — import without side effects, `--help`, empty and long query, missing and broken catalog, exit codes, `pick` not called on catalog error, UTF-8.
   - Done: `uv run pytest -q`; commit `feat: kino CLI`.
 
-- [ ] **Step 18. `show.py`**
+- [x] **Step 18. `show.py`**
   - Do: reads `calls.jsonl`, ignores broken lines, counts outcomes, model, tokens, USD; no file → «no calls», exit 0; unknown price → 0.
   - Test: `tests/test_show.py` — temporary journal, broken line, aggregates, empty file.
   - Done: `uv run pytest -q`; commit `feat: show journal report`.
