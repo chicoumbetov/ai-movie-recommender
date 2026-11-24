@@ -33,7 +33,7 @@ class Selection(BaseModel):
     model_config = ConfigDict(extra="forbid")
     """Schema for the model's selection response.
 
-    Corresponds to the `Selection` model in SPEC section 8.3.
+    Corresponds to the `Selection` model in SPEC
     Extra fields are forbidden; an extra field produces ValidationError
     and therefore `invalid`.
     """
