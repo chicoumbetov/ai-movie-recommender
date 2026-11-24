@@ -107,7 +107,7 @@
 
 ## Phase 3 — CLI и `show.py`
 
-- [ ] **Step 17. `kino.py` CLI**
+- [x] **Step 17. `kino.py` CLI**
   - Do: `argparse` with one positional query; `--help` → 0; empty/whitespace and >1000 chars — before model call; control chars; `load_catalog` + `validate_catalog` before client; single client `max_retries=0`, timeout 60; config from env via `dotenv`; exit codes 0/1/2; UTF-8; missing key — clear error. Under `if __name__ == "__main__":`.
   - Test: `tests/test_cli.py` — import without side effects, `--help`, empty and long query, missing and broken catalog, exit codes, `pick` not called on catalog error, UTF-8.
   - Done: `uv run pytest -q`; commit `feat: kino CLI`.

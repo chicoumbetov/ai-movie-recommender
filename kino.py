@@ -573,3 +573,98 @@ def _validate_choice(
     if rejected:
         return ("invalid", [], rejected, "")
     return ("ok", resolved, [], reason)
+
+
+def validate_query(query: str) -> str | None:
+    """Return an error message for an unusable query, or None."""
+    if not query.strip():
+        return "query must not be empty"
+    if len(query) > MAX_QUERY_CHARS:
+        return f"query must be at most {MAX_QUERY_CHARS} characters"
+    if CONTROL_CHARS.search(query):
+        return "query must not contain control characters"
+    return None
+
+
+def load_settings() -> dict[str, str]:
+    """Read runtime settings from `.env` and the process environment."""
+    from dotenv import load_dotenv
+
+    load_dotenv(".env")
+    import os
+
+    return {
+        "api_key": os.environ.get("OPENAI_API_KEY", "").strip(),
+        "base_url": os.environ.get("OPENAI_BASE_URL", "").strip(),
+        "model": os.environ.get("MODEL", "").strip(),
+        "reasoning_effort": os.environ.get("REASONING_EFFORT", "").strip(),
+    }
+
+
+def make_client(settings: dict[str, str]) -> Any:
+    """Create the single OpenAI client used by the process."""
+    from openai import OpenAI
+
+    kwargs: dict[str, Any] = {
+        "api_key": settings["api_key"],
+        "timeout": REQUEST_TIMEOUT_SECONDS,
+        "max_retries": 0,
+    }
+    if settings.get("base_url"):
+        kwargs["base_url"] = settings["base_url"]
+    return OpenAI(**kwargs)
+
+
+def build_parser() -> Any:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        prog="kino.py",
+        description="Pick 1-3 films from the curated catalog for a query.",
+    )
+    parser.add_argument("query", help="natural-language film query")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    """CLI entry point. Returns the process exit code."""
+    args = build_parser().parse_args(argv)
+    query = args.query
+
+    problem = validate_query(query)
+    if problem:
+        print(f"error: {problem}", file=sys.stderr)
+        return 2
+
+    try:
+        films = load_catalog()
+    except CatalogError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 2
+
+    problems = validate_catalog(films)
+    if problems:
+        print("error: catalog is invalid:", file=sys.stderr)
+        for item in problems:
+            print(f"- {item}", file=sys.stderr)
+        return 2
+
+    settings = load_settings()
+    if not settings.get("api_key"):
+        print("error: OPENAI_API_KEY is missing from .env", file=sys.stderr)
+        return 2
+    if not settings.get("model"):
+        print("error: MODEL is missing from .env", file=sys.stderr)
+        return 2
+
+    client = make_client(settings)
+    outcome, _ids = pick(client, settings["model"], query, films)
+    if outcome in {"ok", "no_match", "clarify"}:
+        return 0
+    if outcome == "invalid":
+        return 1
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
