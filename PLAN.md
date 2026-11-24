@@ -100,7 +100,7 @@
   - Test: `tests/test_guardrails.py` — control chars, ANSI, >300, empty, multi-line.
   - Done: `uv run pytest -q`; commit `feat: sanitize why and reason`.
 
-- [ ] **Step 16. Guardrails: claims verification**
+- [x] **Step 16. Guardrails: claims verification**
   - Do: year 1888–2099 must match the selected film's year or be in the query; explicit minutes — same; title of another catalog film is forbidden if it's not in the query; your title is allowed; word boundary check so `Drive` isn't caught in `Driver`; language `why` is not checked.
   - Test: expand `tests/test_guardrails.py` — invalid year, invalid minutes, foreign title, title from query, Russian `why` for English query.
   - Done: `uv run pytest -q`; commit `feat: verify why claims against catalog`.

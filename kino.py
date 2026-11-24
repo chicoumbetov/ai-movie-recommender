@@ -340,6 +340,49 @@ def sanitize_text(text: str) -> str:
     return " ".join(without_control.split())
 
 
+YEAR_CLAIM: re.Pattern[str] = re.compile(r"(?<!\d)(\d{4})(?!\d)")
+MINUTES_CLAIM: re.Pattern[str] = re.compile(
+    r"(?<!\d)(\d{1,3})\s*(?:min(?:ute)?s?|мин(?:ут)?[ыа]?)(?!\w)",
+    re.IGNORECASE,
+)
+
+
+def _mentions(text: str, title: str) -> bool:
+    if not title:
+        return False
+    pattern = r"(?<!\w)" + re.escape(title) + r"(?!\w)"
+    return re.search(pattern, text, re.IGNORECASE) is not None
+
+
+def verify_why(
+    why: str,
+    film: dict[str, Any],
+    films: list[dict[str, Any]],
+    query: str,
+) -> bool:
+    """Reject a why that asserts a fact contradicting the catalog or the query."""
+    for match in YEAR_CLAIM.finditer(why):
+        year = int(match.group(1))
+        if not 1888 <= year <= 2099:
+            continue
+        if year != film["year"] and str(year) not in query and str(year) not in film["title"]:
+            return False
+
+    for match in MINUTES_CLAIM.finditer(why):
+        minutes = int(match.group(1))
+        if minutes != film["minutes"] and str(minutes) not in query:
+            return False
+
+    for other in films:
+        if other["id"] == film["id"]:
+            continue
+        title = other.get("title", "")
+        if _mentions(why, title) and not _mentions(query, title):
+            return False
+
+    return True
+
+
 def _print_film(film: dict[str, Any], why: str) -> None:
     print(f"{film['title']} ({film['year']}), {film['minutes']} min")
     print(f"Genres: {', '.join(film['genres'])}")
@@ -453,7 +496,7 @@ def pick(
         return (model_outcome, [])
 
     selection = completion.choices[0].message.parsed
-    outcome, resolved, rejected, reason = _validate_choice(selection, candidates)
+    outcome, resolved, rejected, reason = _validate_choice(selection, candidates, films, query)
     log(
         model=model,
         request=choice_request,
@@ -484,6 +527,8 @@ def pick(
 def _validate_choice(
     selection: Selection | None,
     candidates: list[dict[str, Any]],
+    films: list[dict[str, Any]],
+    query: str,
 ) -> tuple[str, list[tuple[dict[str, Any], str]], list[Any], str]:
     """Validate one Selection against the candidates without printing anything."""
     if selection is None:
@@ -519,6 +564,8 @@ def _validate_choice(
             return ("invalid", [], [], "")
         why = sanitize_text(pick_item.why)
         if not why or len(why) > MAX_WHY_CHARS:
+            return ("invalid", [], [], "")
+        if not verify_why(why, film, films, query):
             return ("invalid", [], [], "")
         seen.add(key)
         resolved.append((film, why))
