@@ -3,6 +3,7 @@ import time
 
 PRICE = {"gpt-6-luna": (0.10, 0.50), "gpt-6-astra": (10.00, 50.00), "qwen3.5:4b": (0.00, 0.00)}
 
+
 def log(model, request, outcome, started, completion=None):
     row = {
         "time": time.strftime("%H:%M:%S"),

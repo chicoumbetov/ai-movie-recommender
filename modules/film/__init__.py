@@ -13,10 +13,26 @@ from typing import Literal
 from pydantic import BaseModel, Field, validator
 
 CanonicalGenre = Literal[
-    "action", "adventure", "animation", "biography", "comedy",
-    "crime", "documentary", "drama", "family", "fantasy",
-    "history", "horror", "musical", "mystery", "romance",
-    "science fiction", "sport", "thriller", "war", "western",
+    "action",
+    "adventure",
+    "animation",
+    "biography",
+    "comedy",
+    "crime",
+    "documentary",
+    "drama",
+    "family",
+    "fantasy",
+    "history",
+    "horror",
+    "musical",
+    "mystery",
+    "romance",
+    "science fiction",
+    "sport",
+    "thriller",
+    "war",
+    "western",
 ]
 
 
@@ -50,23 +66,31 @@ class Film(BaseModel, extra="forbid"):
     """Runtime 1-600 minutes."""
 
     genres: list[CanonicalGenre] = Field(
-        ..., min_items=1, max_items=4,
+        ...,
+        min_items=1,
+        max_items=4,
         description="1-4 canonical genres",
     )
     """1-4 values from canonical vocabulary."""
 
     countries: list[str] = Field(
-        ..., min_items=1, description="Production countries",
+        ...,
+        min_items=1,
+        description="Production countries",
     )
     """Non-empty list. "Казахстан" for Kazakhstan."""
 
     languages: list[str] = Field(
-        ..., min_items=1, description="Spoken languages",
+        ...,
+        min_items=1,
+        description="Spoken languages",
     )
     """Non-empty list of English language names."""
 
     description: str = Field(
-        ..., min_length=20, max_length=500,
+        ...,
+        min_length=20,
+        max_length=500,
         description="1-2 original sentences",
     )
     """1-2 original sentences, 20-500 chars, no control chars."""
@@ -77,6 +101,7 @@ class Film(BaseModel, extra="forbid"):
     def no_control_chars(cls, v):
         """Description must not contain ASCII control characters."""
         import re
+
         if re.search(r"[\x00-\x1f\x7f]", v):
             raise ValueError("no control chars")
         return v
