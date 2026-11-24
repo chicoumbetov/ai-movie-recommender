@@ -2,8 +2,8 @@
 
 An AI movie recommendation system that understands complex and unconventional queries.
 
-- Behavior contract: `SPEC.md` (normative; do not duplicate it here)
-- Work order: `PLAN.md`
+- Behavior contract "how to do": `SPEC.md` (normative; do not duplicate it here)
+- Work order "what to do": `PLAN.md`
 - Choices and reasons: `docs/decisions.md`
 
 ## Stack
