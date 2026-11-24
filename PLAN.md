@@ -48,7 +48,7 @@
   - Test: `tests/test_catalog_loader.py` — no file, broken JSON, broken UTF-8, not multiple problems at once, valid file.
   - Done: `uv run pytest -q`; commit `feat: catalog loader with full validation`.
 
-- [ ] **Step 6. Catalog build script**
+- [x] **Step 6. Catalog build script**
   - Do: `scripts/build_catalog.py` — reads `TMDB_API_KEY` only from `.env`, fetches TMDb, maps genres to canon, writes `data/en/films.json` and `catalog_sources.json`; without key — understandable error.
   - Test: `tests/test_catalog_build.py` — mapping synonyms, key absence → code 2 and message, fake TMDb payload → correct fields.
   - Done: `uv run pytest -q`; commit `feat: one-off catalog build script`.
