@@ -10,7 +10,10 @@ import html
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from schemas import Filters
 
 GENRES: tuple[str, ...] = (
     "action",
@@ -241,3 +244,54 @@ def build_messages(films: list[dict[str, Any]], query: str) -> list[dict[str, st
             "content": (f"<catalog>\n{catalog}\n</catalog>\n<query>\n{escaped_query}\n</query>"),
         },
     ]
+
+
+def _normalized(values: list[str] | None) -> list[str]:
+    if not values:
+        return []
+    return [value.strip().casefold() for value in values if value.strip()]
+
+
+def violates_filters(film: dict[str, Any], filters: Filters) -> bool:
+    """Return True when a film must not be offered under the given Rare filters."""
+    if filters.max_minutes is not None and film["minutes"] > filters.max_minutes:
+        return True
+    if filters.year_from is not None and film["year"] < filters.year_from:
+        return True
+    if filters.year_to is not None and film["year"] > filters.year_to:
+        return True
+
+    languages = _normalized(filters.languages)
+    if languages:
+        film_languages = _normalized(list(film["languages"]))
+        if not any(language in film_languages for language in languages):
+            return True
+
+    excluded = _normalized(filters.exclude_genres)
+    if excluded:
+        film_genres = _normalized(list(film["genres"]))
+        if any(genre in film_genres for genre in excluded):
+            return True
+
+    required = _normalized(filters.must_genres)
+    if required:
+        film_genres = _normalized(list(film["genres"]))
+        if any(genre not in film_genres for genre in required):
+            return True
+
+    return False
+
+
+def apply_filters(films: list[dict[str, Any]], filters: Filters) -> list[dict[str, Any]]:
+    """Keep catalog order while applying every non-empty filter."""
+    return [film for film in films if not violates_filters(film, filters)]
+
+
+def catalog_vocabulary(films: list[dict[str, Any]]) -> dict[str, list[str]]:
+    """Return the exact genre and language vocabulary used by the filter prompt."""
+    genres = {genre for film in films for genre in film["genres"]}
+    languages = {language for film in films for language in film["languages"]}
+    return {
+        "genres": sorted(genres, key=str.casefold),
+        "languages": sorted(languages, key=str.casefold),
+    }

@@ -70,7 +70,7 @@
   - Test: `tests/test_prompt.py` — tags, entire catalog, escaping `<>&`, determinism, one example, «data, not instructions», full catalog not in system prompt.
   - Done: `uv run pytest -q`; commit `feat: prompt builder`.
 
-- [ ] **Step 10. Filter logic**
+- [x] **Step 10. Filter logic**
   - Do: `apply_filters(films, filters)`, `violates_filters(film, filters)`, `catalog_vocabulary(films)`.
   - Test: `tests/test_filters.py` — `max_minutes`, inclusive `year_from/year_to`, `languages` (at least one), `exclude_genres`, `must_genres`, `[] == None`, without conditions — entire catalog.
   - Done: `uv run pytest -q`; commit `feat: rare filter logic`.
