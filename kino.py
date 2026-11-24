@@ -60,6 +60,7 @@ FILM_FIELDS: frozenset[str] = frozenset(
 )
 FORBIDDEN_TAGS: tuple[str, ...] = ("<catalog>", "</catalog>", "<query>", "</query>")
 CONTROL_CHARS: re.Pattern[str] = re.compile(r"[\x00-\x1f\x7f]")
+ANSI_ESCAPE: re.Pattern[str] = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 MIN_FILMS: int = 40
 MAX_FILMS: int = 60
 MIN_YEAR: int = 1888
@@ -332,6 +333,13 @@ def build_filter_messages(films: list[dict[str, Any]], query: str) -> list[dict[
     ]
 
 
+def sanitize_text(text: str) -> str:
+    """Remove ANSI escapes and control characters, then collapse to one line."""
+    without_ansi = ANSI_ESCAPE.sub("", text)
+    without_control = CONTROL_CHARS.sub(" ", without_ansi)
+    return " ".join(without_control.split())
+
+
 def _print_film(film: dict[str, Any], why: str) -> None:
     print(f"{film['title']} ({film['year']}), {film['minutes']} min")
     print(f"Genres: {', '.join(film['genres'])}")
@@ -445,7 +453,7 @@ def pick(
         return (model_outcome, [])
 
     selection = completion.choices[0].message.parsed
-    outcome, resolved, rejected = _validate_choice(selection, candidates)
+    outcome, resolved, rejected, reason = _validate_choice(selection, candidates)
     log(
         model=model,
         request=choice_request,
@@ -463,12 +471,10 @@ def pick(
         return ("ok", [film["id"] for film, _why in resolved])
 
     if outcome == "no_match":
-        reason = (selection.reason or "").strip() if selection is not None else ""
         print(reason or "No matching films found.")
         return ("no_match", [])
 
     if outcome == "clarify":
-        reason = (selection.reason or "").strip() if selection is not None else ""
         print(reason or "Could you clarify your request?")
         return ("clarify", [])
 
@@ -478,20 +484,24 @@ def pick(
 def _validate_choice(
     selection: Selection | None,
     candidates: list[dict[str, Any]],
-) -> tuple[str, list[tuple[dict[str, Any], str]], list[Any]]:
+) -> tuple[str, list[tuple[dict[str, Any], str]], list[Any], str]:
     """Validate one Selection against the candidates without printing anything."""
     if selection is None:
-        return ("invalid", [], [])
+        return ("invalid", [], [], "")
+    raw_reason = selection.reason or ""
+    reason = sanitize_text(raw_reason)
+    if raw_reason.strip() and not reason:
+        return ("invalid", [], [], "")
     if selection.status == "no_match":
         if selection.picks:
-            return ("invalid", [], [])
-        return ("no_match", [], [])
+            return ("invalid", [], [], "")
+        return ("no_match", [], [], reason)
     if selection.status == "clarify":
         if selection.picks:
-            return ("invalid", [], [])
-        return ("clarify", [], [])
+            return ("invalid", [], [], "")
+        return ("clarify", [], [], reason)
     if not selection.picks or len(selection.picks) > MAX_PICKS:
-        return ("invalid", [], [])
+        return ("invalid", [], [], "")
 
     resolved: list[tuple[dict[str, Any], str]] = []
     seen: set[str] = set()
@@ -506,10 +516,13 @@ def _validate_choice(
             rejected.append(pick_item.film_id)
             continue
         if key in seen:
-            return ("invalid", [], [])
+            return ("invalid", [], [], "")
+        why = sanitize_text(pick_item.why)
+        if not why or len(why) > MAX_WHY_CHARS:
+            return ("invalid", [], [], "")
         seen.add(key)
-        resolved.append((film, pick_item.why))
+        resolved.append((film, why))
 
     if rejected:
-        return ("invalid", [], rejected)
-    return ("ok", resolved, [])
+        return ("invalid", [], rejected, "")
+    return ("ok", resolved, [], reason)

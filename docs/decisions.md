@@ -68,6 +68,8 @@ choices and reasons. It does not restate the contract.
 
 - `why`: strip, non-empty, ≤300 characters, one line.
 - Control characters and ANSI are removed; an impermissible value is `invalid`.
+- A truly empty `reason` on `no_match` keeps the SPEC §7 generic text; a non-empty
+  `reason` that sanitizes to empty is `invalid` (PLAN step 15 read together with SPEC §7).
 - A year 1888–2099 in `why` must match the selected film or appear in the query.
 - Explicit minutes in `why` must match `minutes` or appear in the query.
 - Another catalog film's title is forbidden if it is not in the query; its own title is allowed.

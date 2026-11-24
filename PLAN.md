@@ -95,7 +95,7 @@
   - Test: `tests/test_pick_errors.py` — all outcomes, journal writes and on errors.
   - Done: `uv run pytest -q`; commit `feat: map model failures to outcomes`.
 
-- [ ] **Step 15. Guardrails: sanitization**
+- [x] **Step 15. Guardrails: sanitization**
   - Do: strip, non-empty, ≤300, one line, removal of ANSI/control chars from `why` and `reason` (empty `reason` after cleaning or invalid `why` -> `invalid`).
   - Test: `tests/test_guardrails.py` — control chars, ANSI, >300, empty, multi-line.
   - Done: `uv run pytest -q`; commit `feat: sanitize why and reason`.
