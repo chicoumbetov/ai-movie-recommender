@@ -161,7 +161,7 @@
   - Test: expand `tests/test_bot_handlers.py`.
   - Done: `uv run pytest -q`; commit `feat: clarify dialogue`.
 
-- [ ] **Step 27. Exceptions and more**
+- [x] **Step 27. Exceptions and more**
   - Do: «already watched X», «don't want Y», «except Z», «without <genre>» → `excluded_ids` and `excluded_genres`; exceptions until `/new`; removal of seen and excluded before choice-call; repeatedly selected id → `invalid`; no new ones — `no_match`; state survives restart.
   - Test: expand `tests/test_bot_handlers.py` and `tests/test_state.py`.
   - Done: `uv run pytest -q`; commit `feat: more and exclusions`.

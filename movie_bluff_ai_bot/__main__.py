@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+import re
 import sys
 from collections.abc import Callable
 from contextlib import redirect_stdout
@@ -169,11 +170,59 @@ class BotHandlers:
         clarification_answer: bool = False,
     ) -> None:
         current = self._load_state(chat_id) if current is None else current
+        lowered = query.casefold()
+        exclusion_cues = (
+            "already watched",
+            "don't want",
+            "do not want",
+            "except",
+            "without",
+            "не хочу",
+            "не смотрел",
+            "уже смотрел",
+            "кроме",
+            "без",
+        )
+        if any(cue in lowered for cue in exclusion_cues):
+            excluded_ids = {str(value) for value in current["excluded_ids"]}
+            for film in self.films:
+                title = film.get("title")
+                if isinstance(title, str) and title.casefold() in lowered:
+                    film_id = film.get("id")
+                    if isinstance(film_id, (str, int)) and not isinstance(film_id, bool):
+                        if str(film_id) not in excluded_ids:
+                            current["excluded_ids"].append(film_id)
+                            excluded_ids.add(str(film_id))
+            excluded_genres = set(current["excluded_genres"])
+            for genre in kino.GENRES:
+                if re.search(rf"(?<!\w){re.escape(genre)}(?!\w)", lowered):
+                    if genre not in excluded_genres:
+                        current["excluded_genres"].append(genre)
+                        excluded_genres.add(genre)
+
+        unavailable = {str(value) for value in current["seen_ids"] + current["excluded_ids"]}
+        excluded_genres = set(current["excluded_genres"])
+        candidates = [
+            film
+            for film in self.films
+            if str(film.get("id")) not in unavailable
+            and not excluded_genres.intersection(film.get("genres", []))
+        ]
+        if not candidates:
+            if not clarification_answer:
+                current["last_query"] = query
+            self._save_state(chat_id, current)
+            await self._send(
+                bot,
+                chat_id,
+                "No new matching films are available. Use /new to start over.",
+            )
+            return
         output = StringIO()
         try:
             max_clarify_turns = _max_clarify_turns()
             with redirect_stdout(output):
-                outcome, ids = self.picker(self.client, self.model, query, self.films)
+                outcome, ids = self.picker(self.client, self.model, query, candidates)
         except Exception:
             if not clarification_answer:
                 current["last_query"] = query
@@ -183,6 +232,14 @@ class BotHandlers:
 
         current["last_query"] = query
         response = output.getvalue().strip()
+        candidate_ids = {str(film.get("id")) for film in candidates}
+        if outcome == "ok" and (
+            not ids
+            or len({str(film_id) for film_id in ids}) != len(ids)
+            or any(str(film_id) not in candidate_ids for film_id in ids)
+        ):
+            outcome = "invalid"
+            response = "I couldn't complete that request. Please try again."
         if outcome == "clarify":
             if current["clarify_turns"] >= max_clarify_turns:
                 outcome = "no_match"

@@ -201,6 +201,78 @@ def test_model_error_is_answered_without_crashing(
     assert "try again" in bot.sent[0]["text"].lower()
 
 
+def test_more_excludes_seen_ids_before_choice_and_returns_no_match_when_exhausted(
+    catalog: list[dict[str, Any]], tmp_path: Path
+) -> None:
+    bot = FakeBot()
+    path = tmp_path / "state.json"
+    calls: list[list[str | int]] = []
+
+    def picker(
+        _client: Any, _model: str, _query: str, films: list[dict[str, Any]]
+    ) -> tuple[str, list[str]]:
+        calls.append([film["id"] for film in films])
+        return ("ok", [str(films[0]["id"])])
+
+    handler = _handlers(catalog, path, picker)
+    asyncio.run(handler.text(FakeMessage("quiet drama", bot)))
+    asyncio.run(handler.more(FakeMessage("/more", bot)))
+    asyncio.run(handler.more(FakeMessage("/more", bot)))
+    asyncio.run(handler.more(FakeMessage("/more", bot)))
+
+    assert calls[0] == [film["id"] for film in catalog]
+    assert "f-001" not in calls[1]
+    assert load_chat_state(42, path)["seen_ids"] == ["f-001", "f-002", "f-003", "f-004"]
+
+    def exhausted(*_args: Any) -> tuple[str, list[str]]:
+        raise AssertionError("picker must not run when no new candidates remain")
+
+    asyncio.run(_handlers(catalog, path, exhausted).more(FakeMessage("/more", bot)))
+    assert "no new" in bot.sent[-1]["text"].lower()
+
+
+def test_explicit_title_and_genre_exclusions_persist_and_filter_candidates(
+    catalog: list[dict[str, Any]], tmp_path: Path
+) -> None:
+    bot = FakeBot()
+    path = tmp_path / "state.json"
+    received: list[list[str | int]] = []
+
+    def picker(
+        _client: Any, _model: str, _query: str, films: list[dict[str, Any]]
+    ) -> tuple[str, list[str]]:
+        received.append([film["id"] for film in films])
+        return ("no_match", [])
+
+    handler = _handlers(catalog, path, picker)
+    title = catalog[0]["title"]
+    asyncio.run(handler.text(FakeMessage(f"Already watched {title}; without horror", bot)))
+
+    stored = load_chat_state(42, path)
+    assert catalog[0]["id"] in stored["excluded_ids"]
+    assert "horror" in stored["excluded_genres"]
+    assert catalog[0]["id"] not in received[0]
+    assert all("horror" not in film["genres"] for film in catalog if film["id"] in received[0])
+    assert load_chat_state(42, path)["excluded_ids"] == stored["excluded_ids"]
+
+
+def test_picker_repeat_is_invalid_and_its_printed_film_is_discarded(
+    catalog: list[dict[str, Any]], tmp_path: Path
+) -> None:
+    bot = FakeBot()
+
+    def picker(*_args: Any) -> tuple[str, list[str]]:
+        print("A film that was already shown")
+        return ("ok", ["f-001"])
+
+    handler = _handlers(catalog, tmp_path / "state.json", picker)
+    asyncio.run(handler.text(FakeMessage("first", bot)))
+    asyncio.run(handler.more(FakeMessage("/more", bot)))
+
+    assert "already shown" not in bot.sent[-1]["text"].lower()
+    assert "couldn&#x27;t complete" in bot.sent[-1]["text"].lower()
+
+
 def test_clarify_answer_merges_with_query_and_clears_pending_state(
     catalog: list[dict[str, Any]],
     tmp_path: Path,
