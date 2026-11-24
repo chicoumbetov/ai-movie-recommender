@@ -14,8 +14,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from kino import JOURNAL_PATH
-
 PRICE: dict[str, tuple[float, float]] = {
     "gpt-6-luna": (0.10, 0.50),
     "gpt-6-astra": (10.00, 50.00),
@@ -61,6 +59,8 @@ def log(
             "total_tokens": getattr(usage, "total_tokens", prompt_tokens + completion_tokens),
         }
         row["usd"] = (prompt_tokens * price_in + completion_tokens * price_out) / 1_000_000
+
+    from kino import JOURNAL_PATH
 
     target = Path(JOURNAL_PATH if path is None else path)
     try:

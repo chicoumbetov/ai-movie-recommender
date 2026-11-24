@@ -80,7 +80,7 @@
   - Test: `tests/test_journal.py` — one line per call, mandatory fields, no full catalog, UTF-8, unknown price → `usd=0`, unavailable path → warning.
   - Done: `uv run pytest -q`; commit `feat: structured call journal`.
 
-- [ ] **Step 12. `pick`: happy path**
+- [x] **Step 12. `pick`: happy path**
   - Do: `pick(client, model, query, films)` — filter-call (`Filters`, step `filters`), when there are no candidates `no_match` without choice-call, choice-call (`Selection`, step `choice`), id check, printing films **inside `pick`** from the passed catalog, return `(outcome, ids)` in model order.
   - Test: `tests/test_pick_ok.py` — string and int id, order, printing title/year/minutes/genres/countries/languages/description + `Why:`, catalog of 4 films, foreign catalog (films.json is not read), with active filters only candidates in choice-prompt.
   - Done: `uv run pytest -q`; commit `feat: two-stage pick and catalog printing`.
