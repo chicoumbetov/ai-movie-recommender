@@ -3,7 +3,8 @@
 These schemas define the contract between the code and the model's
 response. Using Pydantic models ensures validation of the model output and clear error handling.
 
-The schemas correspond to the `Selection` and `Pick` models. Extra fields are forbidden to prevent the model from injecting unexpected data.
+The schemas correspond to the `Selection` and `Pick` models. Extra fields are forbidden
+to prevent the model from injecting unexpected data.
 """
 
 from __future__ import annotations
