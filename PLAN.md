@@ -85,7 +85,7 @@
   - Test: `tests/test_pick_ok.py` — string and int id, order, printing title/year/minutes/genres/countries/languages/description + `Why:`, catalog of 4 films, foreign catalog (films.json is not read), with active filters only candidates in choice-prompt.
   - Done: `uv run pytest -q`; commit `feat: two-stage pick and catalog printing`.
 
-- [ ] **Step 13. `pick`: invalid answers**
+- [x] **Step 13. `pick`: invalid answers**
   - Do: foreign id → `invalid` + `rejected` + nothing print; duplicate; >3; `ok` with empty `picks`; `no_match` with `picks`; `no_match` prints `why` or generic; `clarify` with empty `picks`; `ValidationError` → `invalid`; trim spaces; numeric string for int id; `1` and `"1"` — duplicate.
   - Test: `tests/test_pick_invalid.py` — each case, `ids` empty for all outcomes except `ok`.
   - Done: `uv run pytest -q`; commit `feat: id and status validation`.

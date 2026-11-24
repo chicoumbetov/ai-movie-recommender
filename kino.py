@@ -13,6 +13,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+from pydantic import ValidationError
+
 from schemas import Filters, Selection
 
 GENRES: tuple[str, ...] = (
@@ -373,50 +375,89 @@ def pick(
 
     choice_request = {"query": query, "ids": [film["id"] for film in candidates]}
     choice_started = time.time()
-    completion = client.chat.completions.parse(
-        model=model,
-        messages=build_messages(candidates, query),
-        response_format=Selection,
-    )
-    selection = completion.choices[0].message.parsed
+    try:
+        completion = client.chat.completions.parse(
+            model=model,
+            messages=build_messages(candidates, query),
+            response_format=Selection,
+        )
+        selection = completion.choices[0].message.parsed
+    except ValidationError:
+        log(
+            model=model,
+            request=choice_request,
+            outcome="invalid",
+            step="choice",
+            started=choice_started,
+            path=journal_path,
+        )
+        return ("invalid", [])
+
+    outcome, resolved, rejected = _validate_choice(selection, candidates)
     log(
         model=model,
         request=choice_request,
-        outcome=selection.status,
+        outcome=outcome,
         step="choice",
         started=choice_started,
         completion=completion,
+        rejected=rejected or None,
         path=journal_path,
     )
 
-    if selection.status == "no_match":
-        if selection.picks:
-            return ("invalid", [])
-        print(selection.reason or "No matching films found.")
+    if outcome == "ok":
+        for film, why in resolved:
+            _print_film(film, why)
+        return ("ok", [film["id"] for film, _why in resolved])
+
+    if outcome == "no_match":
+        reason = (selection.reason or "").strip() if selection is not None else ""
+        print(reason or "No matching films found.")
         return ("no_match", [])
 
-    if selection.status == "clarify":
-        if selection.picks:
-            return ("invalid", [])
-        print(selection.reason or "Could you clarify your request?")
+    if outcome == "clarify":
+        reason = (selection.reason or "").strip() if selection is not None else ""
+        print(reason or "Could you clarify your request?")
         return ("clarify", [])
 
+    return ("invalid", [])
+
+
+def _validate_choice(
+    selection: Selection | None,
+    candidates: list[dict[str, Any]],
+) -> tuple[str, list[tuple[dict[str, Any], str]], list[Any]]:
+    """Validate one Selection against the candidates without printing anything."""
+    if selection is None:
+        return ("invalid", [], [])
+    if selection.status == "no_match":
+        if selection.picks:
+            return ("invalid", [], [])
+        return ("no_match", [], [])
+    if selection.status == "clarify":
+        if selection.picks:
+            return ("invalid", [], [])
+        return ("clarify", [], [])
     if not selection.picks or len(selection.picks) > MAX_PICKS:
-        return ("invalid", [])
+        return ("invalid", [], [])
 
     resolved: list[tuple[dict[str, Any], str]] = []
     seen: set[str] = set()
+    rejected: list[Any] = []
     for pick_item in selection.picks:
-        key = str(pick_item.film_id)
-        if key in seen:
-            return ("invalid", [])
-        seen.add(key)
-        film = next((candidate for candidate in candidates if str(candidate["id"]) == key), None)
+        key = str(pick_item.film_id).strip()
+        film = next(
+            (candidate for candidate in candidates if str(candidate["id"]) == key),
+            None,
+        )
         if film is None:
-            return ("invalid", [])
+            rejected.append(pick_item.film_id)
+            continue
+        if key in seen:
+            return ("invalid", [], [])
+        seen.add(key)
         resolved.append((film, pick_item.why))
 
-    for film, why in resolved:
-        _print_film(film, why)
-
-    return ("ok", [film["id"] for film, _why in resolved])
+    if rejected:
+        return ("invalid", [], rejected)
+    return ("ok", resolved, [])
