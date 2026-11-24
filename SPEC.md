@@ -1,6 +1,5 @@
 # SPEC — Kinomaniac
 
-Assignment: `examples/Инструкция для студентов.pdf`. This file is the delivery contract.
 Agent rules: `AGENTS.md`. Work order: `PLAN.md`. Rationale: `docs/decisions.md`.
 `[A]` = assignment requirement; `[P]` = project choice.
 
