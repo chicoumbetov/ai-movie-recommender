@@ -141,7 +141,7 @@
 
 ## Phase 5 — `state.json` and bot
 
-- [ ] **Step 23. State storage**
+- [x] **Step 23. State storage**
   - Do: `movie_bluff_ai_bot/state.py` — `load_state` and `save_state`, A2.4 fields, atomic write (tmp + `os.replace`), broken file → warning and clean state, `BOT_STATE_PATH`, `state.json` in `.gitignore`.
   - Test: `tests/test_state.py` — roundtrip, restart, broken file, atomic (tmp removed), no secrets.
   - Done: `uv run pytest -q`; commit `feat: persistent bot state`.
