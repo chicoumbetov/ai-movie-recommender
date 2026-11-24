@@ -119,7 +119,7 @@
 
 ## Phase 4 — 30 queries and `check.py`
 
-- [ ] **Step 19. `queries.json` for 30 queries**
+- [x] **Step 19. `queries.json` for 30 queries**
   - Do: 15 Common + 15 Rare; each has `expect`; ≥3 `no_match`; ≥3 with `must`; ≥3 with Kazakh letters `[әғқңөұүһі]`; ≥3 with negation (`не/без/кроме/емес/жоқ`); ≥1 prompt-injection; ≥3 with strict filter; ≥1 `clarify`; no duplicates; all ids from `data/en/films.json`.
   - Test: `tests/test_queries.py` — all R-QRY-01 conditions…10 and 17 plus existence of id.
   - Done: `uv run pytest -q`; commit `data: add 30 evaluation queries`.
