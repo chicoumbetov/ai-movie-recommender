@@ -75,7 +75,7 @@
   - Test: `tests/test_filters.py` — `max_minutes`, inclusive `year_from/year_to`, `languages` (at least one), `exclude_genres`, `must_genres`, `[] == None`, without conditions — entire catalog.
   - Done: `uv run pytest -q`; commit `feat: rare filter logic`.
 
-- [ ] **Step 11. Journal**
+- [x] **Step 11. Journal**
   - Do: rewrite `utils.log()`: `time` UTC ISO 8601, `model`, `request` (query + ids, without catalog), `outcome`, `step`, `rejected`, `usage`, `usd`, `seconds`; `ensure_ascii=False`; write error → warning in stderr, don't crash.
   - Test: `tests/test_journal.py` — one line per call, mandatory fields, no full catalog, UTF-8, unknown price → `usd=0`, unavailable path → warning.
   - Done: `uv run pytest -q`; commit `feat: structured call journal`.
