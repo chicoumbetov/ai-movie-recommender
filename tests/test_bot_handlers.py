@@ -201,6 +201,91 @@ def test_model_error_is_answered_without_crashing(
     assert "try again" in bot.sent[0]["text"].lower()
 
 
+def test_clarify_answer_merges_with_query_and_clears_pending_state(
+    catalog: list[dict[str, Any]],
+    tmp_path: Path,
+) -> None:
+    bot = FakeBot()
+    path = tmp_path / "state.json"
+    queries: list[str] = []
+    original = "A quiet movie from Kazakhstan"
+    answer = "Preferably from the 1990s"
+
+    def picker(_client: Any, _model: str, query: str, _films: Any) -> tuple[str, list[str]]:
+        queries.append(query)
+        if len(queries) == 1:
+            print("Which decade do you prefer?")
+            return ("clarify", [])
+        print("Mongol (2007)")
+        return ("ok", ["f-001"])
+
+    handler = _handlers(catalog, path, picker)
+    asyncio.run(handler.text(FakeMessage(original, bot)))
+
+    waiting = load_chat_state(42, path)
+    assert waiting["pending_clarify"] == "Which decade do you prefer?"
+    assert waiting["clarify_turns"] == 1
+    assert waiting["last_query"] == original
+
+    asyncio.run(handler.text(FakeMessage(answer, bot)))
+
+    assert queries == [original, f"{original}\n{answer}"]
+    finished = load_chat_state(42, path)
+    assert finished["last_query"] == f"{original}\n{answer}"
+    assert finished["pending_clarify"] is None
+    assert finished["clarify_turns"] == 0
+    assert finished["seen_ids"] == ["f-001"]
+    assert "Mongol" in bot.sent[-1]["text"]
+
+
+def test_second_clarify_result_after_turn_limit_becomes_no_match(
+    catalog: list[dict[str, Any]],
+    tmp_path: Path,
+    monkeypatch: Any,
+) -> None:
+    monkeypatch.setenv("MAX_CLARIFY_TURNS", "1")
+    bot = FakeBot()
+    path = tmp_path / "state.json"
+    queries: list[str] = []
+
+    def picker(_client: Any, _model: str, query: str, _films: Any) -> tuple[str, list[str]]:
+        queries.append(query)
+        print("Please add another detail.")
+        return ("clarify", [])
+
+    handler = _handlers(catalog, path, picker)
+    asyncio.run(handler.text(FakeMessage("A short drama", bot)))
+    asyncio.run(handler.text(FakeMessage("Under two hours", bot)))
+
+    assert queries == ["A short drama", "A short drama\nUnder two hours"]
+    final_state = load_chat_state(42, path)
+    assert final_state["pending_clarify"] is None
+    assert final_state["clarify_turns"] == 0
+    assert "no matching" in bot.sent[-1]["text"].lower()
+    assert "please add another detail" not in bot.sent[-1]["text"].lower()
+
+
+def test_command_is_handled_while_clarification_is_pending(
+    catalog: list[dict[str, Any]], tmp_path: Path
+) -> None:
+    bot = FakeBot()
+    path = tmp_path / "state.json"
+    queries: list[str] = []
+
+    def picker(_client: Any, _model: str, query: str, _films: Any) -> tuple[str, list[str]]:
+        queries.append(query)
+        print("What mood do you want?")
+        return ("clarify", [])
+
+    handler = _handlers(catalog, path, picker)
+    asyncio.run(handler.text(FakeMessage("Recommend a movie", bot)))
+    asyncio.run(handler.help(FakeMessage("/help", bot)))
+
+    assert queries == ["Recommend a movie"]
+    assert load_chat_state(42, path)["pending_clarify"] == "What mood do you want?"
+    assert "/start" in bot.sent[-1]["text"]
+
+
 def test_dispatcher_registers_commands_callbacks_and_fallbacks(
     catalog: list[dict[str, Any]], tmp_path: Path
 ) -> None:
@@ -216,6 +301,9 @@ def test_dispatcher_registers_commands_callbacks_and_fallbacks(
     router = dispatcher.sub_routers[0]
     assert len(router.message.handlers) >= 6
     assert len(router.callback_query.handlers) == 1
+    registered = [handler.callback.__name__ for handler in router.message.handlers]
+    assert registered.index("help") < registered.index("text")
+    assert registered.index("unknown") < registered.index("text")
 
 
 def test_bot_library_loggers_use_warning_level() -> None:

@@ -156,7 +156,7 @@
   - Test: `tests/test_bot_handlers.py` — commands, inline callback, free text, `pick` is called, seen_ids, model errors don't crash the bot.
   - Done: `uv run pytest -q`; commit `feat: bot commands and selection`.
 
-- [ ] **Step 26. Clarify**
+- [x] **Step 26. Clarify**
   - Do: `clarify` → one question, `pending_clarify`, merge response with `last_query`, limit `MAX_CLARIFY_TURNS=1`, after limit — `no_match`; command during clarify is handled as a command.
   - Test: expand `tests/test_bot_handlers.py`.
   - Done: `uv run pytest -q`; commit `feat: clarify dialogue`.

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import sys
 from collections.abc import Callable
 from contextlib import redirect_stdout
@@ -21,6 +22,18 @@ import kino
 from movie_bluff_ai_bot import state, telegram
 
 PickFunction = Callable[[Any, str, str, list[dict[str, Any]]], tuple[str, list[str | int]]]
+DEFAULT_MAX_CLARIFY_TURNS = 1
+
+
+def _max_clarify_turns() -> int:
+    raw = os.environ.get("MAX_CLARIFY_TURNS", str(DEFAULT_MAX_CLARIFY_TURNS)).strip()
+    try:
+        turns = int(raw)
+    except ValueError as error:
+        raise ValueError("MAX_CLARIFY_TURNS must be a non-negative integer") from error
+    if turns < 0:
+        raise ValueError("MAX_CLARIFY_TURNS must be a non-negative integer")
+    return turns
 
 
 def configure_logging() -> None:
@@ -115,7 +128,24 @@ class BotHandlers:
     async def text(self, message: Message) -> None:
         query = message.text or ""
         if query.strip():
-            await self._select(message, query)
+            current = self._load_state(message.chat.id)
+            if current["pending_clarify"] is not None:
+                previous = current["last_query"] or ""
+                merged_query = f"{previous}\n{query}".strip()
+                await self._select_target(
+                    message.bot,
+                    message.chat.id,
+                    merged_query,
+                    current=current,
+                    clarification_answer=True,
+                )
+            else:
+                await self._select_target(
+                    message.bot,
+                    message.chat.id,
+                    query,
+                    current=current,
+                )
 
     async def callback(self, callback: CallbackQuery) -> None:
         await callback.answer()
@@ -129,19 +159,44 @@ class BotHandlers:
     async def _select(self, message: Message, query: str) -> None:
         await self._select_target(message.bot, message.chat.id, query)
 
-    async def _select_target(self, bot: Any, chat_id: int, query: str) -> None:
-        current = self._load_state(chat_id)
+    async def _select_target(
+        self,
+        bot: Any,
+        chat_id: int,
+        query: str,
+        *,
+        current: state.BotState | None = None,
+        clarification_answer: bool = False,
+    ) -> None:
+        current = self._load_state(chat_id) if current is None else current
         output = StringIO()
         try:
+            max_clarify_turns = _max_clarify_turns()
             with redirect_stdout(output):
                 outcome, ids = self.picker(self.client, self.model, query, self.films)
         except Exception:
-            current["last_query"] = query
+            if not clarification_answer:
+                current["last_query"] = query
             self._save_state(chat_id, current)
             await self._send(bot, chat_id, "I couldn't complete that request. Please try again.")
             return
 
         current["last_query"] = query
+        response = output.getvalue().strip()
+        if outcome == "clarify":
+            if current["clarify_turns"] >= max_clarify_turns:
+                outcome = "no_match"
+                response = "No matching films found after clarification."
+                current["pending_clarify"] = None
+                current["clarify_turns"] = 0
+            else:
+                response = response or "Could you clarify your request?"
+                current["pending_clarify"] = response
+                current["clarify_turns"] += 1
+        else:
+            current["pending_clarify"] = None
+            current["clarify_turns"] = 0
+
         if outcome == "ok":
             seen = {str(film_id) for film_id in current["seen_ids"]}
             for film_id in ids:
@@ -150,7 +205,6 @@ class BotHandlers:
                     seen.add(str(film_id))
         self._save_state(chat_id, current)
 
-        response = output.getvalue().strip()
         if outcome not in {"ok", "no_match", "clarify"} and not response:
             response = "I couldn't complete that request. Please try again."
         if not response:
