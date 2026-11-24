@@ -6,7 +6,9 @@ never reads a file, prints or creates a client at import time.
 
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 from typing import Any
 
 GENRES: tuple[str, ...] = (
@@ -169,3 +171,34 @@ def validate_catalog(films: Any) -> list[str]:
         )
 
     return problems
+
+
+class CatalogError(Exception):
+    """The catalog cannot be read or does not satisfy SPEC.md section 4."""
+
+
+def load_catalog(path: str | Path | None = None) -> list[dict[str, Any]]:
+    """Read and validate the catalog, raising one error with every problem found."""
+    catalog_path = Path(CATALOG_PATH if path is None else path)
+    try:
+        text = catalog_path.read_text(encoding="utf-8")
+    except FileNotFoundError as error:
+        raise CatalogError(f"catalog file not found: {catalog_path}") from error
+    except UnicodeDecodeError as error:
+        raise CatalogError(f"catalog is not valid UTF-8: {catalog_path}") from error
+    except OSError as error:
+        raise CatalogError(f"catalog cannot be read: {catalog_path}: {error}") from error
+
+    try:
+        films = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise CatalogError(
+            f"catalog is not valid JSON: {catalog_path}: line {error.lineno}, "
+            f"column {error.colno}: {error.msg}"
+        ) from error
+
+    problems = validate_catalog(films)
+    if problems:
+        details = "\n".join(f"- {problem}" for problem in problems)
+        raise CatalogError(f"catalog is invalid: {catalog_path}\n{details}")
+    return films

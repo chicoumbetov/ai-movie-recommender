@@ -43,7 +43,7 @@
   - Test: `tests/test_catalog_validation.py` — all rules 4.4: 40–60, fields and types, unique ids, one id type, year/minutes, 1–4 genres from the dictionary, non-empty countries/languages, ≥5 `"Казахстан"`, tag prohibition (case-insensitive), control chars, description 20–500. Plus a test that importing `kino.py` prints nothing and does not read files.
   - Done: `uv run pytest -q`; commit `feat: catalog validation and constants`.
 
-- [ ] **Step 5. Catalog loader**
+- [x] **Step 5. Catalog loader**
   - Do: `load_catalog(path=CATALOG_PATH)` — exists/readable/UTF-8/JSON, collects **все** problems, raises `CatalogError`; CLI prints them to stderr.
   - Test: `tests/test_catalog_loader.py` — no file, broken JSON, broken UTF-8, not multiple problems at once, valid file.
   - Done: `uv run pytest -q`; commit `feat: catalog loader with full validation`.
