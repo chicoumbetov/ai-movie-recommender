@@ -53,7 +53,7 @@
   - Test: `tests/test_catalog_build.py` — mapping synonyms, key absence → code 2 and message, fake TMDb payload → correct fields.
   - Done: `uv run pytest -q`; commit `feat: one-off catalog build script`.
 
-- [ ] **Step 7. Provenance**
+- [x] **Step 7. Provenance**
   - Do: `catalog_sources.json` for 40 films: `tmdb_id`, `retrieved_at` (UTC ISO), `wikipedia_url`, `verified_by`; minimum 10 independent verifications, including all KZ.
   - Test: `tests/test_catalog_provenance.py` — 40 records, keys, ISO-dates, URL, ids match with `data/en/films.json`, all KZ have independent link.
   - Done: `uv run pytest -q`; commit `data: add catalog provenance`.

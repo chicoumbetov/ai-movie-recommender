@@ -1,0 +1,282 @@
+[
+  {
+    "id": "kz-001",
+    "tmdb_id": 12246,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Mongol_(film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "kz-002",
+    "tmdb_id": 519185,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Ayka",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "kz-003",
+    "tmdb_id": 151652,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://kk.wikipedia.org/wiki/Шал_(фильм)",
+    "verified_by": "Kazakh Wikipedia (independent)"
+  },
+  {
+    "id": "kz-004",
+    "tmdb_id": 109046,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://de.wikipedia.org/wiki/Baikonur_(Film)",
+    "verified_by": "German Wikipedia (independent)"
+  },
+  {
+    "id": "kz-005",
+    "tmdb_id": 447754,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://ru.wikipedia.org/wiki/Дорога_к_матери",
+    "verified_by": "Russian Wikipedia (independent)"
+  },
+  {
+    "id": "int-001",
+    "tmdb_id": 278,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Shawshank_Redemption",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-002",
+    "tmdb_id": 238,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Godfather",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-003",
+    "tmdb_id": 157336,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Interstellar_(film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-004",
+    "tmdb_id": 496243,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Parasite_(2019_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-005",
+    "tmdb_id": 129,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Spirited_Away",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-006",
+    "tmdb_id": 27205,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Inception",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-007",
+    "tmdb_id": 155,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Dark_Knight",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-008",
+    "tmdb_id": 680,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Pulp_Fiction",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-009",
+    "tmdb_id": 603,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Matrix",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-010",
+    "tmdb_id": 313369,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/La_La_Land",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-011",
+    "tmdb_id": 597,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Titanic_(1997_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-012",
+    "tmdb_id": 13,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Forrest_Gump",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-013",
+    "tmdb_id": 98,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Gladiator_(2000_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-014",
+    "tmdb_id": 120,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-015",
+    "tmdb_id": 194,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Am%C3%A9lie",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-016",
+    "tmdb_id": 346,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Seven_Samurai",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-017",
+    "tmdb_id": 11216,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Cinema_Paradiso",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-018",
+    "tmdb_id": 637,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Life_Is_Beautiful",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-019",
+    "tmdb_id": 1417,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Pan%27s_Labyrinth",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-020",
+    "tmdb_id": 244786,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Whiplash_(2014_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-021",
+    "tmdb_id": 37799,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Social_Network",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-022",
+    "tmdb_id": 376867,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Moonlight_(2016_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-023",
+    "tmdb_id": 419430,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Get_Out",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-024",
+    "tmdb_id": 64690,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Drive_(2011_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-025",
+    "tmdb_id": 120467,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Grand_Budapest_Hotel",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-026",
+    "tmdb_id": 335984,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Blade_Runner_2049",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-027",
+    "tmdb_id": 329865,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Arrival_(film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-028",
+    "tmdb_id": 406,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/La_Haine",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-029",
+    "tmdb_id": 670,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Oldboy_(2003_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-030",
+    "tmdb_id": 598,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/City_of_God_(2002_film)",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-031",
+    "tmdb_id": 77338,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Intouchables",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-032",
+    "tmdb_id": 16869,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Inglourious_Basterds",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-033",
+    "tmdb_id": 68718,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Django_Unchained",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-034",
+    "tmdb_id": 76341,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Mad_Max:_Fury_Road",
+    "verified_by": "English Wikipedia (independent)"
+  },
+  {
+    "id": "int-035",
+    "tmdb_id": 1124,
+    "retrieved_at": "2026-11-24T11:32:41Z",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/The_Prestige",
+    "verified_by": "English Wikipedia (independent)"
+  }
+]
