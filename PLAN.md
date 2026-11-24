@@ -38,7 +38,7 @@
 
 ## Phase 1 — catalog
 
-- [ ] **Step 4. Constants + catalog validation**
+- [x] **Step 4. Constants + catalog validation**
   - Do: in `kino.py` — `GENRES` (20 English), `MAX_PICKS=3`, `MAX_QUERY_CHARS=1000`, `MAX_WHY_CHARS=300`, `REQUEST_TIMEOUT_SECONDS=60`, `CATALOG_PATH`, `JOURNAL_PATH`; `validate_catalog(films) -> list[str]`.
   - Test: `tests/test_catalog_validation.py` — all rules 4.4: 40–60, fields and types, unique ids, one id type, year/minutes, 1–4 genres from the dictionary, non-empty countries/languages, ≥5 `"Казахстан"`, tag prohibition (case-insensitive), control chars, description 20–500. Plus a test that importing `kino.py` prints nothing and does not read files.
   - Done: `uv run pytest -q`; commit `feat: catalog validation and constants`.
