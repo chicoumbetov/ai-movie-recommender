@@ -16,7 +16,8 @@ def log(model, request, outcome, started, completion=None):
         price_in, price_out = PRICE.get(model, (0, 0))
         row["id"] = completion.id
         row["usage"] = usage.model_dump()
-        row["usd"] = (usage.prompt_tokens * price_in
-                      + usage.completion_tokens * price_out) / 1_000_000
+        row["usd"] = (
+            usage.prompt_tokens * price_in + usage.completion_tokens * price_out
+        ) / 1_000_000
     with open("calls.jsonl", "a", encoding="utf-8") as file:
         file.write(json.dumps(row, ensure_ascii=False) + "\n")
