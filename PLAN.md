@@ -60,7 +60,7 @@
 
 ## Phase 2 — shema, prompt, `pick`
 
-- [ ] **Step 8. Pydantic-schemas**
+- [x] **Step 8. Pydantic-schemas**
   - Do: Verify `Pick` (`film_id: str | int` strict, `why: str`), `Selection` (`status: Literal["ok","no_match","clarify"]`, `picks`), `Filters` (all fields `None`), `extra="forbid"`.
   - Test: `tests/test_schema.py` — ok/no_match/clarify; extra field → error; film_id=null and float → error; missing fields → error; Filters by default all None.
   - Done: `uv run pytest -q`; commit `feat: response schemas`.
