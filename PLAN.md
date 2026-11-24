@@ -124,7 +124,7 @@
   - Test: `tests/test_queries.py` — all R-QRY-01 conditions…10 and 17 plus existence of id.
   - Done: `uv run pytest -q`; commit `data: add 30 evaluation queries`.
 
-- [ ] **Step 20. `check.py`: expectations logic**
+- [x] **Step 20. `check.py`: expectations logic**
   - Do: `evaluate(expect, outcome, ids)`; `no_match: true` — shorthand; `must` and `forbid`; report: counts by outcomes, foreign ids caught, pass rate, filter violations; continuation after error; exit non-zero.
   - Test: `tests/test_check_report.py` — passing and failing expectations, report, exit code.
   - Done: `uv run pytest -q`; commit `feat: check expectation report`.
