@@ -129,7 +129,7 @@
   - Test: `tests/test_check_report.py` — passing and failing expectations, report, exit code.
   - Done: `uv run pytest -q`; commit `feat: check expectation report`.
 
-- [ ] **Step 21. `check.py`: runner and flags**
+- [x] **Step 21. `check.py`: runner and flags**
   - Do: loading `queries.json` with clear error; run each query through `pick`; `--model`, `--runs`; count by `step`, not by lines; `pick` is reused, choice logic not duplicated.
   - Test: `tests/test_check_runner.py` — fake `pick` and client, continuation after failure, `--runs`, `--model`, exit codes.
   - Done: `uv run pytest -q`; commit `feat: check runner`.
