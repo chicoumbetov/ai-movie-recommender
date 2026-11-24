@@ -120,6 +120,77 @@ def load_state(path: str | Path | None = None) -> BotState:
         return new_state()
 
 
+def _load_chat_document(path: Path) -> tuple[dict[str, BotState], BotState | None]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(raw, dict):
+        raise ValueError("chat state must be a JSON object")
+    if raw.keys() == STATE_FIELDS:
+        return ({}, _validate_state(raw))
+
+    chat_states: dict[str, BotState] = {}
+    for chat_id, value in raw.items():
+        if not isinstance(chat_id, str) or not chat_id.lstrip("-").isdigit():
+            raise ValueError("chat state keys must be numeric chat IDs")
+        chat_states[chat_id] = _validate_state(value)
+    return (chat_states, None)
+
+
+def load_chat_state(chat_id: int, path: str | Path | None = None) -> BotState:
+    """Load one chat's state from a per-chat state document."""
+    target = _state_path(path)
+    try:
+        chat_states, legacy_state = _load_chat_document(target)
+        if legacy_state is not None:
+            return legacy_state
+        return chat_states.get(str(chat_id), new_state())
+    except FileNotFoundError:
+        return new_state()
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as error:
+        print(
+            f"warning: cannot load bot state {target}: {error}; starting with clean state",
+            file=sys.stderr,
+        )
+        return new_state()
+
+
+def save_chat_state(
+    chat_id: int,
+    value: Mapping[str, Any],
+    path: str | Path | None = None,
+) -> None:
+    """Atomically update one chat's state while preserving other chats."""
+    clean_state = _validate_state(dict(value))
+    target = _state_path(path)
+    chat_states: dict[str, BotState] = {}
+    try:
+        chat_states, legacy_state = _load_chat_document(target)
+        if legacy_state is not None:
+            chat_states[str(chat_id)] = legacy_state
+    except FileNotFoundError:
+        pass
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as error:
+        print(
+            f"warning: cannot load bot state {target}: {error}; starting with clean state",
+            file=sys.stderr,
+        )
+
+    chat_states[str(chat_id)] = clean_state
+    temporary = target.with_name(f"{target.name}.tmp")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with temporary.open("w", encoding="utf-8") as file:
+            json.dump(chat_states, file, ensure_ascii=False, indent=2)
+            file.write("\n")
+            file.flush()
+            os.fsync(file.fileno())
+        os.replace(temporary, target)
+    finally:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
+
+
 def save_state(state: Mapping[str, Any], path: str | Path | None = None) -> None:
     """Atomically save a validated state object without accepting secret fields."""
     clean_state = _validate_state(dict(state))

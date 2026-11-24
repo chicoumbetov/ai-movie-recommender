@@ -16,6 +16,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.client.telegram import TelegramAPIServer
 from aiogram.exceptions import TelegramNetworkError, TelegramRetryAfter, TelegramServerError
+from aiogram.types import InlineKeyboardMarkup
 
 from kino import GENRES
 
@@ -132,6 +133,7 @@ async def send_text(
     max_chars: int | None = None,
     max_attempts: int = MAX_SEND_ATTEMPTS,
     sleep: Sleep = asyncio.sleep,
+    reply_markup: InlineKeyboardMarkup | None = None,
 ) -> bool:
     """Escape, split and send a message; retry Telegram throttling and transport errors."""
     if max_attempts < 1:
@@ -140,10 +142,18 @@ async def send_text(
         max_chars = _positive_env_int("TELEGRAM_MAX_MESSAGE_CHARS", MAX_MESSAGE_CHARS)
     max_chars = min(max_chars, MAX_MESSAGE_CHARS)
 
-    for part in split_message(text, max_chars):
+    parts = split_message(text, max_chars)
+    for part_index, part in enumerate(parts):
         for attempt in range(max_attempts):
             try:
-                await bot.send_message(chat_id=chat_id, text=part, parse_mode="HTML")
+                request: dict[str, Any] = {
+                    "chat_id": chat_id,
+                    "text": part,
+                    "parse_mode": "HTML",
+                }
+                if reply_markup is not None and part_index == 0:
+                    request["reply_markup"] = reply_markup
+                await bot.send_message(**request)
                 break
             except TelegramRetryAfter as error:
                 delay = float(error.retry_after)

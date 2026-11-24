@@ -151,7 +151,7 @@
   - Test: `tests/test_bot_transport.py` — fake transport, `429`/`5xx`/network, split, escape, allowlist.
   - Done: `uv run pytest -q`; commit `feat: telegram transport`.
 
-- [ ] **Step 25. Commands and free text**
+- [x] **Step 25. Commands and free text**
   - Do: `movie_bluff_ai_bot/__main__.py` and handlers: `/start` with an inline genre keyboard (`InlineKeyboardBuilder`), a `callback_query` handler that answers every callback, `/help`, `/new`, `/more`, more, unknown command → `/help`, free text → `pick`, `seen_ids` is populated.
   - Test: `tests/test_bot_handlers.py` — commands, inline callback, free text, `pick` is called, seen_ids, model errors don't crash the bot.
   - Done: `uv run pytest -q`; commit `feat: bot commands and selection`.
