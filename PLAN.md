@@ -21,7 +21,7 @@
 
 ## Phase 0 — process and environment
 
-- [ ] **Step 1. Baseline + pytest/dev dependencies**
+- [x] **Step 1. Baseline + pytest/dev dependencies**
   - Do: add `[dependency-groups] dev = ["pytest"]`, `[tool.pytest.ini_options]` with `pythonpath = ["."]`, `testpaths = ["tests"]`, `[tool.ruff]` with target `py312`; run `uv lock`.
   - Test: `tests/test_config.py` reads `pyproject.toml` via `tomllib` and checks `pythonpath`, dev group and `requires-python >= 3.12`. `tests/conftest.py` — fixtures: catalog of 4 films with string ids, catalog with int ids, fake client factory.
   - Done: `uv run pytest -q`; commit `chore: add spec baseline, pytest config and dev deps`.
