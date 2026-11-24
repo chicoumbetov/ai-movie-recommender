@@ -168,7 +168,7 @@
 
 ## Phase 6 - model memory, real runs, README
 
-- [ ] **Step 28. Model memory experiment**
+- [x] **Step 28. Model memory experiment**
   - Do: `scripts/memory_experiment.py` — 10 films, question about year and duration **without catalog**, recording to `memory_calls.jsonl`, comparison with code, number of discrepancies.
   - Test: `tests/test_memory_experiment.py` — fake client, exact and incorrect answers, separate journal, discrepancy counter.
   - Done: `uv run pytest -q`; commit `feat: model-memory experiment`.
