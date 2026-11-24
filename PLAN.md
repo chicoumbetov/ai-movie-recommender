@@ -134,7 +134,7 @@
   - Test: `tests/test_check_runner.py` — fake `pick` and client, continuation after failure, `--runs`, `--model`, exit codes.
   - Done: `uv run pytest -q`; commit `feat: check runner`.
 
-- [ ] **Step 22. Rare: acceptance tests**
+- [x] **Step 22. Rare: acceptance tests**
   - Do: complete pick's behavior: filters didn't leave candidates → `no_match` without choice-call; selected film violates filter → `invalid`; in choice-prompt only candidates; unknown genre or language → `invalid`; journal `step=filters/choice`.
   - Test: `tests/test_rare_flow.py`.
   - Done: `uv run pytest -q`; commit `feat: rare filter acceptance`.

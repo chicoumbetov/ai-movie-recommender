@@ -308,6 +308,19 @@ def catalog_vocabulary(films: list[dict[str, Any]]) -> dict[str, list[str]]:
     }
 
 
+def _filters_use_catalog_vocabulary(filters: Filters, films: list[dict[str, Any]]) -> bool:
+    """Reject model filter values that are absent from the passed catalog vocabulary."""
+    vocabulary = catalog_vocabulary(films)
+    known_languages = {value.casefold() for value in vocabulary["languages"]}
+    known_genres = {value.casefold() for value in vocabulary["genres"]}
+    return all(
+        value.strip().casefold() in known_languages for value in filters.languages or []
+    ) and all(
+        value.strip().casefold() in known_genres
+        for value in [*(filters.exclude_genres or []), *(filters.must_genres or [])]
+    )
+
+
 def build_filter_messages(films: list[dict[str, Any]], query: str) -> list[dict[str, str]]:
     """Build the optional Rare-filter extraction prompt."""
     vocabulary = catalog_vocabulary(films)
@@ -457,6 +470,8 @@ def pick(
     )
     filters = filter_completion.choices[0].message.parsed if filter_completion is not None else None
     if filter_outcome == "ok" and filters is None:
+        filter_outcome = "invalid"
+    elif filter_outcome == "ok" and not _filters_use_catalog_vocabulary(filters, films):
         filter_outcome = "invalid"
     log(
         model=model,
