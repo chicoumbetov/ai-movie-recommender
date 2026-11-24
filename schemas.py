@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, ConfigDict
 
 
 class Pick(BaseModel):
@@ -29,7 +29,8 @@ class Pick(BaseModel):
     on one line. Comes only from the model response."""
 
 
-class Selection(BaseModel, extra=Extra.forbid):
+class Selection(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Schema for the model's selection response.
 
     Corresponds to the `Selection` model in SPEC section 8.3.
