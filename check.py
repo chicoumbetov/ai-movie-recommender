@@ -132,8 +132,7 @@ def run_checks(
         filter_violations += violations
         if not evaluate(expect, outcome, ids):
             failures.append(
-                f"query {index}: {query!r} expected {dict(expect)!r}, "
-                f"got {outcome} {ids!r}"
+                f"query {index}: {query!r} expected {dict(expect)!r}, got {outcome} {ids!r}"
             )
 
     passed = len(queries) - len(failures)

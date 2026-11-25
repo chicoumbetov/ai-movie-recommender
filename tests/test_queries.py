@@ -2,7 +2,6 @@ import json
 import re
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 QUERY_PATH = ROOT / "queries.json"
 FILMS_PATH = ROOT / "data" / "en" / "films.json"
@@ -59,9 +58,7 @@ def test_evaluation_queries_match_step_19_contract() -> None:
                 re.IGNORECASE,
             )
         )
-        injection_count += bool(
-            re.search(r"ignore all previous instructions", text, re.IGNORECASE)
-        )
+        injection_count += bool(re.search(r"ignore all previous instructions", text, re.IGNORECASE))
 
     assert no_match_count >= 3
     assert must_count >= 3

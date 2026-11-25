@@ -282,3 +282,228 @@ Models:
 Tokens: prompt=63274, completion=3422, total=66696
 USD: 0.000000
 command exit: 0
+
+$ uv run check.py
+Inception (2010), 148 min
+Genres: action, science fiction, thriller
+Countries: USA, United Kingdom
+Languages: English
+A thief who infiltrates other people's dreams is given the task of planting an idea instead of stealing.
+Why: This film is explicitly about dreaming within dreams.
+
+No matching films found.
+The Godfather (1972), 175 min
+Genres: crime, drama
+Countries: USA
+Languages: English
+The head of the Corleone crime family passes control of the business to his youngest son.
+Why: Title and plot directly match the query.
+
+Parasite (2019), 132 min
+Genres: comedy, drama, thriller
+Countries: South Korea
+Languages: Korean
+A poor family gradually infiltrates the life of a rich family, but secrets begin to surface.
+Why: Это единственный фильм в каталоге, где сюжет посвящен семье бедняков, проникающих в дом богатых людей.
+
+Spirited Away (2001), 125 min
+Genres: animation, fantasy, adventure
+Countries: Japan
+Languages: Japanese
+A girl ends up in the spirit world and must work in a bathhouse for gods to save her parents.
+Why: The film features a girl who ends up in the spirit world and works in a bathhouse.
+
+The Dark Knight (2008), 152 min
+Genres: action, drama, crime
+Countries: USA, United Kingdom
+Languages: English
+Batman confronts the Joker, a chaotic criminal sowing terror in Gotham.
+Why: Matches the query for a superhero vigilante story in Gotham.
+
+The Matrix (1999), 136 min
+Genres: action, science fiction
+Countries: USA
+Languages: English
+A hacker learns that reality is a simulation and joins the uprising against machines.
+Why: The plot involves a hacker realizing reality is a simulation.
+
+No matching films found.
+Titanic (1997), 195 min
+Genres: drama, romance
+Countries: USA
+Languages: English
+A love story between passengers of different classes on the Titanic during its maiden voyage.
+Why: Fits the description of a doomed romance on a sinking ship.
+
+No film in the catalog features a man running across America.
+Gladiator (2000), 155 min
+Genres: action, drama, adventure
+Countries: USA, United Kingdom
+Languages: English
+A Roman general becomes a gladiator to avenge the emperor who killed his family.
+Why: Matches the user's query exactly.
+
+The Lord of the Rings: The Fellowship of the Ring (2001), 178 min
+Genres: fantasy, adventure, drama
+Countries: New Zealand, USA
+Languages: English
+Hobbit Frodo and his companions set out to destroy the One Ring.
+Why: Matches the request.
+
+Amélie (2001), 122 min
+Genres: comedy, romance
+Countries: France, Germany
+Languages: French
+A shy waitress decides to change the lives of those around her for the better, until she meets her love.
+Why: Un camarera tímida cambia las vidas de los que la rodean.
+
+No matching films found.
+None of the listed films match the description of a Kazakh film about a migrant mother in Moscow.
+Baikonur (2011), 94 min
+Genres: comedy, drama, romance
+Countries: Казахстан, Germany, Russia
+Languages: Russian, English, French
+Iskander, a young man living on the Kazakh steppes, finds French astronaut Julie after her capsule crashes. Julie now has amnesia, but Iskander convinces her they are engaged.
+Why: Это казахстанская комедия, действие которой происходит вблизи космодрома Байконур.
+
+Mongol: The Rise of Genghis Khan (2007), 125 min
+Genres: action, biography, drama, history
+Countries: Казахстан, Russia, Germany
+Languages: Mongolian, Mandarin
+The story of Genghis Khan's youth, his rise as a leader, and his ascent to the throne.
+Why: Шыңғыс ханның жастық шағы туралы фильм, сұраным мен келісті.
+
+La Haine (1995), 98 min
+Genres: drama
+Countries: France
+Languages: French
+Three friends from the Paris suburbs spend a day after the riots, reflecting on violence and hate.
+Why: It is a 1995 French drama under one hour.
+
+Arrival (2016), 116 min
+Genres: drama, science fiction, thriller
+Countries: USA
+Languages: English
+A linguist tries to establish contact with aliens after alien ships arrive on Earth.
+Why: Научная фантастика под 120 минут.
+
+La Haine (1995), 98 min
+Genres: drama
+Countries: France
+Languages: French
+Three friends from the Paris suburbs spend a day after the riots, reflecting on violence and hate.
+Why: French language and runtime fit criteria.
+
+Не найдено фильмов, выпущенных до 1980 года с продолжительностью более 200 минут в каталоге.
+No matching films found.
+Interstellar (2014), 169 min
+Genres: adventure, drama, science fiction
+Countries: USA, United Kingdom
+Languages: English
+A group of researchers travels through a wormhole in search of a new home for humanity.
+Why: Исследует путешествие через черву и поиск нового дома для человечества.
+
+Arrival (2016), 116 min
+Genres: drama, science fiction, thriller
+Countries: USA
+Languages: English
+A linguist tries to establish contact with aliens after alien ships arrive on Earth.
+Why: Описывает установление контакта с пришельцами после их прибытия на Землю.
+
+Life is Beautiful (1997), 116 min
+Genres: comedy, drama
+Countries: Italy
+Languages: Italian
+A Jewish comedian uses humor and imagination to protect his son in a concentration camp.
+Why: Драма с юмором, но без любви.
+
+The Intouchables (2011), 112 min
+Genres: comedy, drama
+Countries: France
+Languages: French
+A wealthy quadriplegic hires a caregiver from the suburbs, and an unexpected friendship develops between them.
+Why: Веселая история о дружбе без романтических сценариев.
+
+Mongol: The Rise of Genghis Khan (2007), 125 min
+Genres: action, biography, drama, history
+Countries: Казахстан, Russia, Germany
+Languages: Mongolian, Mandarin
+The story of Genghis Khan's youth, his rise as a leader, and his ascent to the throne.
+Why: Алғашқы сұраққа жауап береді.
+
+Ayka (2018), 100 min
+Genres: drama
+Countries: Казахстан, Russia, Germany, Poland, France, China
+Languages: Russian, Kyrgyz
+A Kyrgyz migrant in Moscow fights for the right to keep her child.
+Why: Қазақстандық режиссердың жұмысы.
+
+The Way to Mother (2016), 128 min
+Genres: drama, action
+Countries: Казахстан
+Languages: Kazakh, Russian
+A young man sets out to find his brother who went missing in Afghanistan.
+Why: Бейімделген тақырыбы бар қазақстандық фильм.
+
+The interface rules require selecting only from the provided catalog; external recommendations violate this constraint.
+No matching films found.
+La La Land (2016), 128 min
+Genres: comedy, drama, musical
+Countries: USA
+Languages: English
+A jazz pianist and an actress fall in love in Los Angeles while pursuing their dreams.
+Why: Classic romantic comedy set in Los Angeles.
+
+Amélie (2001), 122 min
+Genres: comedy, romance
+Countries: France, Germany
+Languages: French
+A shy waitress decides to change the lives of those around her for the better, until she meets her love.
+Why: Whimsical French romance exploring human connection.
+
+Ayka (2018), 100 min
+Genres: drama
+Countries: Казахстан, Russia, Germany, Poland, France, China
+Languages: Russian, Kyrgyz
+A Kyrgyz migrant in Moscow fights for the right to keep her child.
+Why: Intimate drama addressing migration and identity.
+
+Outcome counts:
+  invalid: 2
+  no_match: 9
+  ok: 19
+Foreign IDs caught: []
+Filter violations: 0
+Model calls by step:
+  choice: 25
+  filters: 30
+Pass rate: 21/30 (70.0%)
+Failures:
+  query 2: 'A story about a wrongfully imprisoned banker' expected {'must': ['int-001']}, got no_match []
+  query 7: 'A film with intersecting crime stories and a briefcase' expected {'must': ['int-008']}, got invalid []
+  query 9: 'A musical romance in Los Angeles' expected {'must': ['int-010']}, got no_match []
+  query 11: 'A man who runs across America' expected {'must': ['int-012']}, got no_match []
+  query 15: 'A samurai village defends itself from bandits' expected {'must': ['int-016']}, got no_match []
+  query 16: 'A Kazakh film about a migrant mother in Moscow' expected {'must': ['kz-002']}, got no_match []
+  query 22: 'A film released before 1980 with a runtime over 200 minutes' expected {'must': ['int-016']}, got no_match []
+  query 27: 'Ғарыш туралы фильм, бірақ соғыс емес' expected {'must': ['int-003']}, got invalid []
+  query 30: 'Recommend me something good.' expected {'outcome': 'clarify'}, got ok ['int-010', 'int-015', 'kz-002']
+command exit: 1
+
+$ uv run show.py
+error: Failed to initialize cache at `/Users/shynggys.umbetov/.cache/uv`
+  cause: failed to open file `/Users/shynggys.umbetov/.cache/uv/sdists-v9/.git`: Operation not permitted (os error 1)
+command exit: 2
+
+$ uv run show.py
+Calls: 117
+Outcomes:
+  invalid: 2
+  no_connection: 3
+  no_match: 9
+  ok: 103
+Models:
+  qwen3.5:4b: 117
+Tokens: prompt=119029, completion=6596, total=125625
+USD: 0.000000
+command exit: 0

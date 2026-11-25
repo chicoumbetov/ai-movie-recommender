@@ -184,7 +184,7 @@
   - Test: `tests/test_readme.py` — first line, required sections and commands, real output blocks, numbers match with `calls.jsonl`, no placeholders.
   - Done: `uv run pytest -q`; commit `docs: expand README with real results`.
 
-- [ ] **Step 31. Final autocheck**
+- [x] **Step 31. Final autocheck**
   - Do: after commit — `python3 -I checks/kino_check.py .`; fix found issues; repeat `uv sync --frozen`, `uv run pytest -q`, `uv run check.py`, `uv run show.py`; smoke `uv run python -m movie_bluff_ai_bot` with fake-transport, without long-poll.
   - Test: все `S`-checks green and `uv run pytest -q` green.
   - Done: `uv run pytest -q`; commit `chore: pass autocheck`.

@@ -2,7 +2,7 @@
 
 Movie Buff recommends films from a fixed catalog for natural-language requests. The model proposes catalog IDs and short reasons; the program verifies each ID and prints film facts from the catalog.
 
-This is the project’s claimed Lean scope. The one real evaluation run below scored 23 of 30 queries, so the claim describes implemented coverage, not a promise that every model answer is correct.
+This is the project’s claimed Lean scope. Two real local evaluation runs scored 23/30 and 21/30; the detailed report below is the second run. These claims describe implemented coverage, not a promise that every model answer is correct.
 
 ## Purpose
 
@@ -42,45 +42,49 @@ The model does not supply titles, years, runtimes, genres, countries, languages,
 
 ## Real evaluation
 
-This is one local run on `qwen3.5:4b`, not a statistical estimate. The run covered all 30 queries. It passed 23 (76.7%). Six requests expected a particular film but returned no match; the broad request expected `clarify` but returned `ok`. The run caught no foreign IDs and reported no filter violations.
+This is the second local run on `qwen3.5:4b`, not a statistical estimate. It covered all 30 queries and passed 21 (70.0%). Six requests expected a particular film but returned no match, two returned `invalid`, and the broad request expected `clarify` but returned `ok`. The run caught no foreign IDs and reported no filter violations. The first run passed 23/30 (76.7%).
 
 `check.py` output:
 
 ```text
 Outcome counts:
+  invalid: 2
   no_match: 9
-  ok: 21
+  ok: 19
 Foreign IDs caught: []
 Filter violations: 0
 Model calls by step:
-  choice: 26
+  choice: 25
   filters: 30
-Pass rate: 23/30 (76.7%)
+Pass rate: 21/30 (70.0%)
 Failures:
   query 2: 'A story about a wrongfully imprisoned banker' expected {'must': ['int-001']}, got no_match []
+  query 7: 'A film with intersecting crime stories and a briefcase' expected {'must': ['int-008']}, got invalid []
   query 9: 'A musical romance in Los Angeles' expected {'must': ['int-010']}, got no_match []
+  query 11: 'A man who runs across America' expected {'must': ['int-012']}, got no_match []
   query 15: 'A samurai village defends itself from bandits' expected {'must': ['int-016']}, got no_match []
   query 16: 'A Kazakh film about a migrant mother in Moscow' expected {'must': ['kz-002']}, got no_match []
-  query 17: 'A Kazakh comedy set near a space launch site' expected {'must': ['kz-004']}, got no_match []
   query 22: 'A film released before 1980 with a runtime over 200 minutes' expected {'must': ['int-016']}, got no_match []
-  query 30: 'Recommend me something good.' expected {'outcome': 'clarify'}, got ok ['int-018', 'kz-004', 'int-021']
+  query 27: 'Ғарыш туралы фильм, бірақ соғыс емес' expected {'must': ['int-003']}, got invalid []
+  query 30: 'Recommend me something good.' expected {'outcome': 'clarify'}, got ok ['int-010', 'int-015', 'kz-002']
 ```
 
-`show.py` output for the committed journal:
+`show.py` output for the journal after the second run:
 
 ```text
-Calls: 62
+Calls: 117
 Outcomes:
+  invalid: 2
   no_connection: 3
-  no_match: 5
-  ok: 54
+  no_match: 9
+  ok: 103
 Models:
-  qwen3.5:4b: 62
-Tokens: prompt=63274, completion=3422, total=66696
+  qwen3.5:4b: 117
+Tokens: prompt=119029, completion=6596, total=125625
 USD: 0.000000
 ```
 
-The 62 calls include the 56 calls from the 30-query run and six single-query samples. Two early calls timed out before the configured reasoning effort was forwarded; the third `no_connection` was the intentional error-path sample. The successful `ok` and `no_match` samples are also in `real_run_output.txt`.
+The 117 calls include 111 calls across the two 30-query runs and six single-query samples. Two early calls timed out before the configured reasoning effort was forwarded; the third `no_connection` was the intentional error-path sample. The successful `ok` and `no_match` samples are also in `real_run_output.txt`.
 
 ## Catalog and provenance
 
