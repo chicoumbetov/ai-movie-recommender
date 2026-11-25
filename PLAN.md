@@ -191,17 +191,17 @@
 
 ## Phase 7 — Common 100% completion
 
-- [ ] **Step 32. Root `films.json` delivery copy**
+- [x] **Step 32. Root `films.json` delivery copy**
   - Do: add `films.json` at the repository root as an exact copy of `data/en/films.json`; keep `data/en/films.json` for `S03`.
   - Test: `tests/test_artifacts.py` asserts both files parse to the same object.
   - Done: `uv run pytest -q`; commit `fix: add root catalog delivery copy`.
 
-- [ ] **Step 33. Isolate the test journal**
+- [x] **Step 33. Isolate the test journal**
   - Do: add an autouse fixture in `tests/conftest.py` that points `kino.JOURNAL_PATH` at `tmp_path`; verify `tests/test_cli.py` no longer writes the real `calls.jsonl`.
   - Test: run the suite twice; `git diff --exit-code calls.jsonl` stays clean.
   - Done: `uv run pytest -q`; commit `test: isolate the model-call journal`.
 
-- [ ] **Step 34. README journal numbers and English-tag note**
+- [x] **Step 34. README journal numbers and English-tag note**
   - Do: change the answer-5 “62 calls” to the final 172-call journal and mention the first 62-call run explicitly; add a note that `S18` and the probe expect `<catalog>`/`<query>`, so the tags stay English.
   - Test: `tests/test_readme.py` still passes; grep finds `172` and `first 62-call run`.
   - Done: `uv run pytest -q`; commit `docs: align README journal numbers and prompt tags`.

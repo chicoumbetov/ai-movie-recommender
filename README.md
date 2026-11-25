@@ -40,6 +40,8 @@ The command form for a request is `uv run kino.py "..." `. Replace the dots with
 
 The model does not supply titles, years, runtimes, genres, countries, languages, or descriptions. An answer that names a foreign ID is rejected and never shown.
 
+Prompt tags are English: the code sends the catalog inside `<catalog>` and the request inside `<query>`. The mentor autocheck (`kino_check.py`) and its probe (`kino_probe.py`) require these exact tags, so the PDF's `<каталог>`/`<запрос>` wording is not used. This is the only tag form the acceptance check reads.
+
 ## Real evaluation
 
 This is the third local run on `qwen3.5:4b`, not a statistical estimate. It covered all 30 queries and passed 22 (73.3%). Five requests expected a particular film but returned no match; one returned `invalid`; one returned `ok` with the wrong expected IDs; and the broad request expected `clarify` but returned `ok`. The run caught no foreign IDs and reported no filter violations. The first two runs passed 23/30 (76.7%) and 21/30 (70.0%).
@@ -160,7 +162,7 @@ Run it with `PYTHONPATH=. uv run python scripts/memory_experiment.py`.
 2. **What if the model returns an ID outside the catalog?** The ID is recorded as rejected, the result becomes invalid, and no film is printed. See `kino.py:581–583` and `kino.py:532–545`.
 3. **How is a valid response different from a correct recommendation?** A response can parse and contain valid IDs but still miss the expected film. `check.py` compares returned outcomes and IDs with each query’s expectation and counts failures. See `check.py:47–65` and `check.py:118–138`.
 4. **What can a non-ML solution do, and what does it miss here?** Exact rules can filter by year, runtime, language, and genre. They do not infer that “a poor family infiltrating a rich household” describes a film unless the query matches stored metadata or text rules. The current code applies explicit filters in `kino.py:267–299`.
-5. **What did one query cost, and what most affects the price?** In this local run, the model-call journal reports **$0.000000** for 62 calls, so the local Qwen path costs $0 per query in model usage. A paid model’s price depends on input and output token counts; a recommendation can use one filter call and a second choice call. See `utils.py:17–21`, `utils.py:51–61`, and `kino.py:471–507`.
+5. **What did one query cost, and what most affects the price?** In this local run, the model-call journal reports **$0.000000** for 172 calls; the first 62-call run was also $0.000000. The local Qwen path therefore costs $0 per query in model usage. A paid model’s price depends on input and output token counts; a recommendation can use one filter call and a second choice call. See `utils.py:17–21`, `utils.py:51–61`, and `kino.py:471–507`.
 
 ## Scope and limits
 
