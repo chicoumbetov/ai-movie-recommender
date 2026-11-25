@@ -8,4 +8,5 @@ state.json
 state.json.tmp
 qa_calls.jsonl
 checks/
+check/
 examples/
