@@ -211,7 +211,7 @@
   - Test: `tests/test_memory_experiment.py`, `tests/test_readme.py`, `tests/test_artifacts.py`.
   - Done: `uv run pytest -q`; commit `data: run memory experiment on catalog films`.
 
-- [ ] **Step 36. Remove the unused film module**
+- [x] **Step 36. Remove the unused film module**
   - Do: delete `modules/film/__init__.py` (unused duplicate of `schemas.py`) and the empty `modules/` tree if nothing else remains.
   - Test: `uv run pytest -q`; `ruff check`.
   - Done: `uv run pytest -q`; commit `chore: remove unused film module`.
