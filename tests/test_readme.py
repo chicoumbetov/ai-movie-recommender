@@ -91,13 +91,8 @@ def test_readme_catalog_date_and_memory_answers_come_from_artifacts() -> None:
         assert source in readme
     for verified_runtime in ("100", "125", "102", "94"):
         assert verified_runtime in readme
-    for runtime_row in (
-        "| Ayka | 100 min | 120 min |",
-        "| Mongol: The Rise of Genghis Khan | 125 min | 121 min |",
-        "| The Old Man (2012) | 102 min | 106 min |",
-        "| Baikonur | 94 min | 107 min |",
-    ):
-        assert runtime_row in readme
+    assert "Russian-language mirror" in readme
+    assert "tests/test_catalog_translation.py" in readme
     assert "Films compared: 10" in readme
     assert "Discrepancies: 4" in readme
     assert len(memory_rows) == 1

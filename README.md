@@ -91,16 +91,9 @@ The 172 calls include 166 calls across the three 30-query runs and six single-qu
 
 The English catalog contains 40 films. It was built from English-language TMDb data, with Wikipedia references recorded for independent verification. The catalog was not generated from model memory. `catalog_sources.json` records the catalog `id`, `tmdb_id`, retrieval timestamp, `wikipedia_url`, and `verified_by` for each film. The recorded retrieval timestamp is **2026-11-24T11:32:41Z**.
 
-The English file uses TMDb’s English-language (`en-US`) fields; the catalog builder maps its genre labels to the project’s canonical English list. The Russian file is retained as a Russian-language provenance/reference source. The two files share IDs and years. The current English runtimes for the four records below were manually checked against these sources; they differ from their corresponding Russian records:
+The English file uses TMDb’s English-language (`en-US`) fields; the catalog builder maps its genre labels to the project’s canonical English list. `data/ru/films.json` is a Russian-language mirror of the same facts: IDs, years, runtimes, and the genre, country, and language sets match the English catalog, with Russian labels. The exact country token `Казахстан` is kept unchanged. `tests/test_catalog_translation.py` fails if the two files drift apart.
 
-| Film | English catalog | Russian catalog | Manual verification |
-| --- | ---: | ---: | --- |
-| Ayka | 100 min | 120 min | [Wikipedia](https://en.wikipedia.org/wiki/Ayka) |
-| Mongol: The Rise of Genghis Khan | 125 min | 121 min | [Wikipedia](https://en.wikipedia.org/wiki/Mongol_(film)) |
-| The Old Man (2012) | 102 min | 106 min | [Wikipedia](https://en.wikipedia.org/wiki/The_Old_Man_(2012_film)) |
-| Baikonur | 94 min | 107 min | [French Wikipedia](https://fr.wikipedia.org/wiki/Baikonur) |
-
-These English values are the manually verified values in `data/en/films.json`; the catalog files were left unchanged. The differences are documented as provenance discrepancies between the paired language catalogs.
+The English runtimes for Ayka (100 min), Mongol (125 min), The Old Man (102 min), and Baikonur (94 min) were manually checked against [Wikipedia](https://en.wikipedia.org/wiki/Ayka), [Wikipedia](https://en.wikipedia.org/wiki/Mongol_(film)), [Wikipedia](https://en.wikipedia.org/wiki/The_Old_Man_(2012_film)), and [French Wikipedia](https://fr.wikipedia.org/wiki/Baikonur). The Russian mirror was then synced to those values.
 
 **Attribution:** This product uses the TMDB API but is not endorsed or certified by TMDB. See [TMDB](https://www.themoviedb.org/) and [TMDB’s API FAQ](https://developer.themoviedb.org/docs/faq).
 

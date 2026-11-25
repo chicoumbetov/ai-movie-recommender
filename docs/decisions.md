@@ -18,7 +18,8 @@ choices and reasons. It does not restate the contract.
 - 40–60 films; minimum 5 with the exact token `"Казахстан"`.
 - 20 English canonical genres; synonyms are mapped before writing.
 - IDs are unique and of one type; recommended format is string `f-001`.
-- When translating, `id`, `year` and `minutes` are not changed.
+- When translating, `id`, `year` and `minutes` are not changed. The Russian mirror is
+  derived from the English facts with a fixed label map.
 - The catalog is not generated from model memory; source is TMDb plus independent verification.
 - Runtime does not call TMDb or IMDb.
 
@@ -31,19 +32,21 @@ choices and reasons. It does not restate the contract.
 - The English catalog was not generated from model memory. TMDb supplied the source data;
   Wikipedia references and the manual checks below provide independent verification.
 - The English catalog uses TMDb's `en-US` fields, and the builder maps genre labels to the
-  canonical English genre list. The Russian catalog remains the Russian-language reference;
-  the English and Russian files have matching IDs and years.
+  canonical English genre list. `data/ru/films.json` is a Russian-language mirror: IDs, years,
+  runtimes and the genre/country/language sets match the English file, with Russian labels;
+  the exact token `Казахстан` is unchanged.
 - TMDb attribution used in the README: “This product uses the TMDB API but is not endorsed or
   certified by TMDB.”
 - Comparison with `data/ru/films.json` found four runtime differences. Manual source checks
-  confirm the English `data/en/films.json` values below; the catalog files remain unchanged:
-  - Ayka: 100 minutes ([Wikipedia](https://en.wikipedia.org/wiki/Ayka)); Russian record: 120.
+  confirmed the English `data/en/films.json` values; the Russian mirror was then synced to
+  them (step 43), so the two files no longer disagree:
+  - Ayka: 100 minutes ([Wikipedia](https://en.wikipedia.org/wiki/Ayka)); Russian record was 120.
   - Mongol: 125 minutes ([Wikipedia](https://en.wikipedia.org/wiki/Mongol_(film))); Russian
-    record: 121.
+    record was 121.
   - The Old Man (2012): 102 minutes
-    ([Wikipedia](https://en.wikipedia.org/wiki/The_Old_Man_(2012_film))); Russian record: 106.
+    ([Wikipedia](https://en.wikipedia.org/wiki/The_Old_Man_(2012_film))); Russian record was 106.
   - Baikonur: 94 minutes ([French Wikipedia](https://fr.wikipedia.org/wiki/Baikonur)); Russian
-    record: 107.
+    record was 107.
 
 ## Model and client
 
