@@ -22,6 +22,29 @@ choices and reasons. It does not restate the contract.
 - The catalog is not generated from model memory; source is TMDb plus independent verification.
 - Runtime does not call TMDb or IMDb.
 
+### Catalog provenance audit — step 30
+
+- The 40 English catalog records were retrieved from TMDb at `2026-11-24T11:32:41Z`.
+- `catalog_sources.json` records `id`, `tmdb_id`, `retrieved_at`, `wikipedia_url` and
+  `verified_by`. Its Wikipedia references include independent English, Kazakh, German and
+  Russian sources.
+- The English catalog was not generated from model memory. TMDb supplied the source data;
+  Wikipedia references and the manual checks below provide independent verification.
+- The English catalog uses TMDb's `en-US` fields, and the builder maps genre labels to the
+  canonical English genre list. The Russian catalog remains the Russian-language reference;
+  the English and Russian files have matching IDs and years.
+- TMDb attribution used in the README: “This product uses the TMDB API but is not endorsed or
+  certified by TMDB.”
+- Comparison with `data/ru/films.json` found four runtime differences. Manual source checks
+  confirm the English `data/en/films.json` values below; the catalog files remain unchanged:
+  - Ayka: 100 minutes ([Wikipedia](https://en.wikipedia.org/wiki/Ayka)); Russian record: 120.
+  - Mongol: 125 minutes ([Wikipedia](https://en.wikipedia.org/wiki/Mongol_(film))); Russian
+    record: 121.
+  - The Old Man (2012): 102 minutes
+    ([Wikipedia](https://en.wikipedia.org/wiki/The_Old_Man_(2012_film))); Russian record: 106.
+  - Baikonur: 94 minutes ([French Wikipedia](https://fr.wikipedia.org/wiki/Baikonur)); Russian
+    record: 107.
+
 ## Model and client
 
 - Default: local `qwen3.5:4b` via Ollama, `reasoning_effort="none"`.

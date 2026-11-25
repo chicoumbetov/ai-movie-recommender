@@ -179,7 +179,7 @@
   - Done: `uv run pytest -q`; commit `data: add real model runs`.
   - Prerequisite: Ollama is running and has `qwen3.5:4b`. If model is missing — step is blocked, need to mention it, not bypass.
 
-- [ ] **Step 30. README**
+- [x] **Step 30. README**
   - Do: first line — exact Lean-claim; five questions lecture 1; commands; real outputs `check.py` and `show.py`; catalog source, date, attribution, verification and translation method; experiment with memory (prompt, answers, discrepancies); five answers task with file:line; honest note about local model; links to `SPEC.md`, `AGENTS.md`, `PLAN.md.`
   - Test: `tests/test_readme.py` — first line, required sections and commands, real output blocks, numbers match with `calls.jsonl`, no placeholders.
   - Done: `uv run pytest -q`; commit `docs: expand README with real results`.
