@@ -241,17 +241,22 @@
   - Test: `tests/test_check_runner.py` checks the cloud profile and model; `uv run pytest -q`; `uv run ruff check`.
   - Done: `uv run pytest -q`; commit `feat: add cloud profile for the R05 benchmark`.
 
-- [ ] **Step 42. R05: two models, three runs each**
+- [ ] **Step 42. Clarify a general request**
+  - Do: the system prompt returns `clarify` for a request with no usable preference and never uses `no_match` for it; the bot writes its calls to `bot_calls.jsonl` so the evaluation journal stays stable.
+  - Test: `tests/test_prompt.py` checks the clarify rule; `tests/test_bot_handlers.py` checks the bot journal path; a local model check of `Recommend me something good.` and `Посоветуй что нибудь` returns `clarify`.
+  - Done: `uv run pytest -q`; commit `fix: clarify a general request and isolate bot calls`.
+
+- [ ] **Step 43. R05: two models, three runs each**
   - Do: make every query reach the `choice` stage, then run `uv run check.py --profile local --runs 3` and `uv run check.py --profile cloud --runs 3`; add a README table with pass rate, foreign IDs, seconds, and price for both models.
   - Test: autocheck `R05` green (`sum(n >= 3) >= 2`); README numbers match `calls.jsonl` and `show.py`.
   - Done: `uv run pytest -q`; commit `data: add two-model R05 benchmark`.
 
-- [ ] **Step 43. L03: one model, five runs**
+- [ ] **Step 44. L03: one model, five runs**
   - Do: run the same set five times on `qwen3.5:4b`; add the all-five-runs pass rate next to the single-run rate in README.
   - Test: autocheck `L03` green (`any(n >= 5)`); README numbers match the journal.
   - Done: `uv run pytest -q`; commit `data: add five-run L03 repeatability`.
 
-- [ ] **Step 44. Owner acceptance**
+- [ ] **Step 45. Owner acceptance**
   - Do: owner restores `check/`, commits, then runs `python3 -I check/kino_check.py .` and `--live`; verifies `S01–S21`, `R02–R05`, `L02–L03`, the Telegram bot, the video link, and three catalog facts.
   - Test: all claimed checks green; `calls.jsonl` unchanged.
   - Done: owner confirms; no agent commit.

@@ -134,6 +134,7 @@ One model call writes one JSON line to `calls.jsonl`.
 - Entry: `uv run python -m movie_bluff_ai_bot`.
 - `TELEGRAM_BOT_TOKEN` and `TELEGRAM_API_BASE` and transport settings come from `.env` (see `.env.example`).
 - `state.json` (or the path from `.env.example`) stores per-chat state, is written atomically and is gitignored.
+- The bot writes its calls to `bot_calls.jsonl` (`BOT_JOURNAL_PATH`), so interactive use never changes the evaluation journal `calls.jsonl`.
 - State fields: `seen_ids`, `excluded_ids`, `excluded_genres`, `last_query`, `last_filters`, `pending_clarify`, `clarify_turns`, `updated_at`.
 - “More” returns only new films; a re-shown ID is `invalid`.
 - Exclusions live until `/new`.

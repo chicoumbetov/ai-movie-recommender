@@ -53,12 +53,14 @@ class BotHandlers:
         model: str,
         films: list[dict[str, Any]],
         state_path: str | Path | None = None,
+        journal_path: str | Path | None = None,
         picker: PickFunction | None = None,
     ) -> None:
         self.client = client
         self.model = model
         self.films = films
         self.state_path = state_path
+        self.journal_path = journal_path
         self.picker = kino.pick if picker is None else picker
 
     def register(self, router: Router) -> None:
@@ -226,6 +228,9 @@ class BotHandlers:
         output = StringIO()
         try:
             max_clarify_turns = _max_clarify_turns()
+            picker_kwargs: dict[str, str | Path] = {}
+            if self.journal_path is not None:
+                picker_kwargs["journal_path"] = self.journal_path
             with redirect_stdout(output):
                 outcome, ids = await asyncio.to_thread(
                     self.picker,
@@ -233,6 +238,7 @@ class BotHandlers:
                     self.model,
                     query,
                     candidates,
+                    **picker_kwargs,
                 )
         except Exception:
             if not clarification_answer:
@@ -286,6 +292,7 @@ def build_dispatcher(
     model: str,
     films: list[dict[str, Any]],
     state_path: str | Path | None = None,
+    journal_path: str | Path | None = None,
     picker: PickFunction | None = None,
 ) -> Dispatcher:
     dispatcher = telegram.create_dispatcher()
@@ -295,6 +302,7 @@ def build_dispatcher(
         model=model,
         films=films,
         state_path=state_path,
+        journal_path=journal_path,
         picker=picker,
     ).register(router)
     dispatcher.include_router(router)
@@ -315,7 +323,13 @@ async def run_bot() -> int:
         films = kino.load_catalog()
         client = kino.make_client(settings)
         bot = telegram.create_bot()
-        dispatcher = build_dispatcher(client=client, model=settings["model"], films=films)
+        journal_path = os.environ.get("BOT_JOURNAL_PATH", "").strip() or "bot_calls.jsonl"
+        dispatcher = build_dispatcher(
+            client=client,
+            model=settings["model"],
+            films=films,
+            journal_path=journal_path,
+        )
     except Exception as error:
         print(f"error: cannot start bot ({type(error).__name__})", file=sys.stderr)
         return 2

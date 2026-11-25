@@ -422,3 +422,27 @@ def test_run_bot_prints_startup_message(
 
     assert asyncio.run(bot_main.run_bot()) == 0
     assert "bot started with qwen3.5:4b" in capsys.readouterr().out
+
+
+def test_bot_writes_calls_to_its_own_journal(catalog: list[dict[str, Any]], tmp_path: Path) -> None:
+    bot = FakeBot()
+    received: list[dict[str, Any]] = []
+
+    def picker(*_args: Any, **kwargs: Any) -> tuple[str, list[str]]:
+        received.append(kwargs)
+        print("Recommended film")
+        return ("ok", ["f-001"])
+
+    journal = tmp_path / "bot_calls.jsonl"
+    handler = bot_main.BotHandlers(
+        client=object(),
+        model="test-model",
+        films=catalog,
+        state_path=tmp_path / "state.json",
+        journal_path=journal,
+        picker=picker,
+    )
+
+    asyncio.run(handler.text(FakeMessage("a quiet film", bot)))
+
+    assert received == [{"journal_path": journal}]

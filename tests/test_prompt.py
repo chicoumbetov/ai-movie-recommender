@@ -73,3 +73,14 @@ def test_empty_query_still_escapes(catalog: list[dict[str, Any]]) -> None:
 
     user = build_messages(catalog, "")[1]["content"]
     assert "<запрос>\n\n</запрос>" in user
+
+
+def test_system_prompt_asks_to_clarify_a_general_request(
+    catalog: list[dict[str, Any]],
+) -> None:
+    from kino import build_messages
+
+    system = build_messages(catalog, "a quiet film")[0]["content"].lower()
+    assert "too general" in system
+    assert "clarify" in system
+    assert "never use no_match for a general request" in system
