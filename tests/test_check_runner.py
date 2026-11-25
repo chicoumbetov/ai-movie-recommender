@@ -173,3 +173,48 @@ def test_main_returns_nonzero_when_expectation_fails(
     monkeypatch.setattr(check, "JOURNAL_PATH", tmp_path / "calls.jsonl")
 
     assert check.main([]) == 1
+
+
+def test_main_cloud_profile_reads_cloud_settings(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    catalog: list[dict[str, Any]],
+) -> None:
+    settings = {
+        "api_key": "cloud-placeholder",
+        "base_url": "https://api.openai.com/v1",
+        "model": "gpt-6-luna",
+        "reasoning_effort": "",
+    }
+    profiles: list[str] = []
+    selected: list[str] = []
+
+    def fake_settings(profile: str = "local") -> dict[str, str]:
+        profiles.append(profile)
+        return settings
+
+    def fake_pick(
+        _client: Any,
+        model: str,
+        _query: str,
+        _films: list[dict[str, Any]],
+        *,
+        journal_path: str | Path | None = None,
+    ) -> tuple[str, list[str | int]]:
+        selected.append(model)
+        return ("no_match", [])
+
+    monkeypatch.setattr(
+        check,
+        "load_queries",
+        lambda _path: [{"query": "q", "expect": {"no_match": True}}],
+    )
+    monkeypatch.setattr(check, "load_catalog", lambda: catalog)
+    monkeypatch.setattr(check, "load_settings", fake_settings)
+    monkeypatch.setattr(check, "make_client", lambda _settings: object())
+    monkeypatch.setattr(check, "pick", fake_pick)
+    monkeypatch.setattr(check, "JOURNAL_PATH", tmp_path / "calls.jsonl")
+
+    assert check.main(["--profile", "cloud"]) == 0
+    assert profiles == ["cloud"]
+    assert selected == ["gpt-6-luna"]

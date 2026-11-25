@@ -231,8 +231,28 @@
   - Test: `uv run pytest -q`; `uv run ruff check`; autocheck `S18` green.
   - Done: `uv run pytest -q`; commit `fix: use Russian prompt tags required by S18`.
 
-- [ ] **Step 40. Owner acceptance**
-  - Do: owner restores `check/`, commits, then runs `python3 -I check/kino_check.py .` and `--live`; verifies `S01–S21`, `R02–R04`, `L02`, the Telegram bot, and three catalog facts.
+- [x] **Step 40. Bot startup and slow-call isolation**
+  - Do: print `bot started with <model>` before polling; run `pick` via `asyncio.to_thread` so polling is not blocked; ignore an expired `callback.answer()`; default local `REASONING_EFFORT` to `none`.
+  - Test: `tests/test_bot_handlers.py` covers the startup line, expired callback, and normal selection; `uv run pytest -q`.
+  - Done: `uv run pytest -q`; commit `fix: make the telegram bot start and respond reliably`.
+
+- [x] **Step 41. Cloud benchmark profile for R05**
+  - Do: `load_settings(profile="cloud")` reads `OPENAI_CLOUD_API_KEY`, `OPENAI_CLOUD_BASE_URL`, `OPENAI_CLOUD_MODEL`; `check.py --profile cloud` selects it; `.env.example` documents the three names; local `REASONING_EFFORT` defaults to `none`.
+  - Test: `tests/test_check_runner.py` checks the cloud profile and model; `uv run pytest -q`; `uv run ruff check`.
+  - Done: `uv run pytest -q`; commit `feat: add cloud profile for the R05 benchmark`.
+
+- [ ] **Step 42. R05: two models, three runs each**
+  - Do: make every query reach the `choice` stage, then run `uv run check.py --profile local --runs 3` and `uv run check.py --profile cloud --runs 3`; add a README table with pass rate, foreign IDs, seconds, and price for both models.
+  - Test: autocheck `R05` green (`sum(n >= 3) >= 2`); README numbers match `calls.jsonl` and `show.py`.
+  - Done: `uv run pytest -q`; commit `data: add two-model R05 benchmark`.
+
+- [ ] **Step 43. L03: one model, five runs**
+  - Do: run the same set five times on `qwen3.5:4b`; add the all-five-runs pass rate next to the single-run rate in README.
+  - Test: autocheck `L03` green (`any(n >= 5)`); README numbers match the journal.
+  - Done: `uv run pytest -q`; commit `data: add five-run L03 repeatability`.
+
+- [ ] **Step 44. Owner acceptance**
+  - Do: owner restores `check/`, commits, then runs `python3 -I check/kino_check.py .` and `--live`; verifies `S01–S21`, `R02–R05`, `L02–L03`, the Telegram bot, the video link, and three catalog facts.
   - Test: all claimed checks green; `calls.jsonl` unchanged.
   - Done: owner confirms; no agent commit.
 

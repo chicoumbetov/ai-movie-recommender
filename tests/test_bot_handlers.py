@@ -384,3 +384,41 @@ def test_bot_library_loggers_use_warning_level() -> None:
     assert logging.getLogger("httpx").level == logging.WARNING
     assert logging.getLogger("httpcore").level == logging.WARNING
     assert logging.getLogger("aiogram").level == logging.WARNING
+
+
+def test_expired_callback_answer_is_ignored(catalog: list[dict[str, Any]], tmp_path: Path) -> None:
+    from aiogram.exceptions import TelegramBadRequest
+    from aiogram.methods import GetMe
+
+    class ExpiredCallback(FakeCallback):
+        async def answer(self) -> None:
+            raise TelegramBadRequest(GetMe(), "query is too old")
+
+    bot = FakeBot()
+    handler = _handlers(catalog, tmp_path / "state.json", lambda *_args: ("no_match", []))
+    callback = ExpiredCallback("genre:drama", FakeMessage("", bot))
+
+    asyncio.run(handler.callback(callback))
+
+    assert bot.sent
+
+
+def test_run_bot_prints_startup_message(
+    monkeypatch: Any, capsys: Any, catalog: list[dict[str, Any]]
+) -> None:
+    async def fake_start(*_args: Any, **_kwargs: Any) -> None:
+        return None
+
+    monkeypatch.setattr(
+        bot_main.kino,
+        "load_settings",
+        lambda: {"api_key": "placeholder", "model": "qwen3.5:4b"},
+    )
+    monkeypatch.setattr(bot_main.kino, "load_catalog", lambda: catalog)
+    monkeypatch.setattr(bot_main.kino, "make_client", lambda _settings: object())
+    monkeypatch.setattr(bot_main.telegram, "create_bot", lambda: object())
+    monkeypatch.setattr(bot_main, "build_dispatcher", lambda **_kwargs: object())
+    monkeypatch.setattr(bot_main.telegram, "start_polling", fake_start)
+
+    assert asyncio.run(bot_main.run_bot()) == 0
+    assert "bot started with qwen3.5:4b" in capsys.readouterr().out

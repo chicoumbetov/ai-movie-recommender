@@ -610,18 +610,32 @@ def validate_query(query: str) -> str | None:
     return None
 
 
-def load_settings() -> dict[str, str]:
-    """Read runtime settings from `.env` and the process environment."""
+def load_settings(profile: str = "local") -> dict[str, str]:
+    """Read runtime settings from `.env` and the process environment.
+
+    `profile="cloud"` reads the separate cloud-benchmark variables so the local
+    path and the Rare comparison cannot overwrite each other.
+    """
     from dotenv import load_dotenv
 
     load_dotenv(".env")
     import os
 
+    if profile == "cloud":
+        return {
+            "api_key": os.environ.get("OPENAI_CLOUD_API_KEY", "").strip(),
+            "base_url": os.environ.get("OPENAI_CLOUD_BASE_URL", "").strip(),
+            "model": os.environ.get("OPENAI_CLOUD_MODEL", "").strip(),
+            "reasoning_effort": os.environ.get("REASONING_EFFORT", "").strip(),
+        }
+    if profile != "local":
+        raise ValueError("profile must be 'local' or 'cloud'")
+
     return {
         "api_key": os.environ.get("OPENAI_API_KEY", "").strip(),
         "base_url": os.environ.get("OPENAI_BASE_URL", "").strip(),
         "model": os.environ.get("MODEL", "").strip(),
-        "reasoning_effort": os.environ.get("REASONING_EFFORT", "").strip(),
+        "reasoning_effort": os.environ.get("REASONING_EFFORT", "none").strip() or "none",
     }
 
 

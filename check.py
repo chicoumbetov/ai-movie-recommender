@@ -226,6 +226,12 @@ def build_parser() -> Any:
     )
     parser.add_argument("--model", help="model name (defaults to MODEL from .env)")
     parser.add_argument("--runs", type=int, default=1, help="number of full query-set runs")
+    parser.add_argument(
+        "--profile",
+        choices=["local", "cloud"],
+        default="local",
+        help="settings profile: local Ollama or the cloud benchmark variables",
+    )
     return parser
 
 
@@ -243,13 +249,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {error}", file=sys.stderr)
         return 2
 
-    settings = load_settings()
+    settings = load_settings(profile="cloud") if args.profile == "cloud" else load_settings()
     if not settings.get("api_key"):
-        print("error: OPENAI_API_KEY is missing from .env", file=sys.stderr)
+        key_name = "OPENAI_CLOUD_API_KEY" if args.profile == "cloud" else "OPENAI_API_KEY"
+        print(f"error: {key_name} is missing from .env", file=sys.stderr)
         return 2
     model = args.model or settings.get("model", "")
     if not model:
-        print("error: MODEL is missing from .env or --model", file=sys.stderr)
+        model_name = "OPENAI_CLOUD_MODEL" if args.profile == "cloud" else "MODEL"
+        print(f"error: {model_name} is missing from .env or --model", file=sys.stderr)
         return 2
 
     try:

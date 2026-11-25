@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from aiogram import Dispatcher, F, Router
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -149,7 +150,11 @@ class BotHandlers:
                 )
 
     async def callback(self, callback: CallbackQuery) -> None:
-        await callback.answer()
+        try:
+            await callback.answer()
+        except TelegramBadRequest:
+            # A queued callback can expire while a slow model call is running.
+            pass
         data = callback.data or ""
         message = callback.message
         if not telegram.callback_data_allowed(data) or message is None:
@@ -222,7 +227,13 @@ class BotHandlers:
         try:
             max_clarify_turns = _max_clarify_turns()
             with redirect_stdout(output):
-                outcome, ids = self.picker(self.client, self.model, query, candidates)
+                outcome, ids = await asyncio.to_thread(
+                    self.picker,
+                    self.client,
+                    self.model,
+                    query,
+                    candidates,
+                )
         except Exception:
             if not clarification_answer:
                 current["last_query"] = query
@@ -309,6 +320,7 @@ async def run_bot() -> int:
         print(f"error: cannot start bot ({type(error).__name__})", file=sys.stderr)
         return 2
 
+    print(f"bot started with {settings['model']}; press Ctrl+C to stop", flush=True)
     await telegram.start_polling(dispatcher, bot)
     return 0
 
