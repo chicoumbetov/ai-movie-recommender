@@ -34,6 +34,17 @@ def _git(*args: str, check: bool = True) -> str:
     ).stdout
 
 
+def _is_git_worktree() -> bool:
+    result = subprocess.run(
+        ["git", "rev-parse", "--is-inside-work-tree"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return result.returncode == 0 and result.stdout.strip() == "true"
+
+
 def _gitignore() -> list[str]:
     return [
         line.strip()
@@ -44,14 +55,16 @@ def _gitignore() -> list[str]:
 
 def test_calls_journal_is_not_ignored() -> None:
     assert "calls.jsonl" not in _gitignore()
-    assert not _git("check-ignore", "calls.jsonl", check=False).strip()
+    if _is_git_worktree():
+        assert not _git("check-ignore", "calls.jsonl", check=False).strip()
 
 
 def test_state_and_qa_journals_are_ignored() -> None:
     ignored = _gitignore()
     for name in ("state.json", "state.json.tmp", "qa_calls.jsonl"):
         assert name in ignored
-        assert _git("check-ignore", name).strip() == name
+        if _is_git_worktree():
+            assert _git("check-ignore", name).strip() == name
 
 
 def test_env_example_lists_all_keys() -> None:
@@ -70,6 +83,10 @@ def test_env_example_has_no_real_looking_secrets() -> None:
 
 
 def test_env_file_is_not_tracked() -> None:
-    tracked = set(_git("ls-files").splitlines())
-    assert ".env" not in tracked
-    assert ".env.example" in tracked
+    if _is_git_worktree():
+        tracked = set(_git("ls-files").splitlines())
+        assert ".env" not in tracked
+        assert ".env.example" in tracked
+    else:
+        assert not (ROOT / ".env").exists()
+        assert (ROOT / ".env.example").is_file()

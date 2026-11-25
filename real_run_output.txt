@@ -507,3 +507,249 @@ Models:
 Tokens: prompt=119029, completion=6596, total=125625
 USD: 0.000000
 command exit: 0
+
+$ uv run check.py (after S07 fix)
+None of the films match the theme.
+No matching films found.
+The Godfather (1972), 175 min
+Genres: crime, drama
+Countries: USA
+Languages: English
+The head of the Corleone crime family passes control of the business to his youngest son.
+Why: Fits the request.
+
+Parasite (2019), 132 min
+Genres: comedy, drama, thriller
+Countries: South Korea
+Languages: Korean
+A poor family gradually infiltrates the life of a rich family, but secrets begin to surface.
+Why: Describe un familia pobre que se infiltra en la vida de una familia rica, pero sus secretos comienzan a revelar.
+
+Spirited Away (2001), 125 min
+Genres: animation, fantasy, adventure
+Countries: Japan
+Languages: Japanese
+A girl ends up in the spirit world and must work in a bathhouse for gods to save her parents.
+Why: The plot features a girl working in a bathhouse for gods.
+
+The Dark Knight (2008), 152 min
+Genres: action, drama, crime
+Countries: USA, United Kingdom
+Languages: English
+Batman confronts the Joker, a chaotic criminal sowing terror in Gotham.
+Why: Matches the description of Batman confronting the Joker in Gotham.
+
+Pulp Fiction (1994), 154 min
+Genres: crime, drama
+Countries: USA
+Languages: English
+Intertwined stories of two hitmen, a boxer, and robbers in Los Angeles.
+Why: Pulp Fiction features multiple interconnected crime narratives.
+
+No matching films found.
+Titanic (1997), 195 min
+Genres: drama, romance
+Countries: USA
+Languages: English
+A love story between passengers of different classes on the Titanic during its maiden voyage.
+Why: Matches the specific description of the query.
+
+Forrest Gump (1994), 142 min
+Genres: drama, romance
+Countries: USA
+Languages: English
+A man with low IQ becomes a witness and participant in key events of the 20th century in the USA.
+Why: A man with low IQ becomes a witness and participant in key events of the 20th century in the USA.
+
+Gladiator (2000), 155 min
+Genres: action, drama, adventure
+Countries: USA, United Kingdom
+Languages: English
+A Roman general becomes a gladiator to avenge the emperor who killed his family.
+Why: The title and description explicitly mention a Roman general turned gladiator.
+
+The Lord of the Rings: The Fellowship of the Ring (2001), 178 min
+Genres: fantasy, adventure, drama
+Countries: New Zealand, USA
+Languages: English
+Hobbit Frodo and his companions set out to destroy the One Ring.
+Why: Matches the request for a hobbit's journey to destroy a ring.
+
+Amélie (2001), 122 min
+Genres: comedy, romance
+Countries: France, Germany
+Languages: French
+A shy waitress decides to change the lives of those around her for the better, until she meets her love.
+Why: Una camarera tímida que decide cambiar las vidas de los demás hasta encontrar su amor.
+
+No film in the catalog matches a samurai village defending against bandits.
+No match found.
+Baikonur (2011), 94 min
+Genres: comedy, drama, romance
+Countries: Казахстан, Germany, Russia
+Languages: Russian, English, French
+Iskander, a young man living on the Kazakh steppes, finds French astronaut Julie after her capsule crashes. Julie now has amnesia, but Iskander convinces her they are engaged.
+Why: Fits the query perfectly.
+
+Mongol: The Rise of Genghis Khan (2007), 125 min
+Genres: action, biography, drama, history
+Countries: Казахстан, Russia, Germany
+Languages: Mongolian, Mandarin
+The story of Genghis Khan's youth, his rise as a leader, and his ascent to the throne.
+Why: Бұл фильм Шыңғыс ханның жастық шағы туралы.
+
+La Haine (1995), 98 min
+Genres: drama
+Countries: France
+Languages: French
+Three friends from the Paris suburbs spend a day after the riots, reflecting on violence and hate.
+Why: Fits the mood and the constraints.
+
+Arrival (2016), 116 min
+Genres: drama, science fiction, thriller
+Countries: USA
+Languages: English
+A linguist tries to establish contact with aliens after alien ships arrive on Earth.
+Why: Arrival fits all constraints: science fiction genre, release year 2016, and runtime 116 minutes.
+
+La Haine (1995), 98 min
+Genres: drama
+Countries: France
+Languages: French
+Three friends from the Paris suburbs spend a day after the riots, reflecting on violence and hate.
+Why: Language: French, Minutes: 98.
+
+Seven Samurai (1954), 207 min
+Genres: drama, adventure
+Countries: Japan
+Languages: Japanese
+A poor village hires seven samurai to protect against bandits.
+Why: Matches the query requirements.
+
+No matching films found.
+Interstellar (2014), 169 min
+Genres: adventure, drama, science fiction
+Countries: USA, United Kingdom
+Languages: English
+A group of researchers travels through a wormhole in search of a new home for humanity.
+Why: Персонажи исследуют черную дыру в поиске нового дома для человечества.
+
+Arrival (2016), 116 min
+Genres: drama, science fiction, thriller
+Countries: USA
+Languages: English
+A linguist tries to establish contact with aliens after alien ships arrive on Earth.
+Why: Лингвист устанавливает контакт с пришельцами после прибытия их кораблей на Землю.
+
+Parasite (2019), 132 min
+Genres: comedy, drama, thriller
+Countries: South Korea
+Languages: Korean
+A poor family gradually infiltrates the life of a rich family, but secrets begin to surface.
+Why: Комедия без романтики
+
+The Grand Budapest Hotel (2014), 99 min
+Genres: comedy, drama
+Countries: USA, Germany
+Languages: English
+A legendary concierge and his eager lobby boy get drawn into a battle over the hotel's fortune.
+Why: Комедия без романтики
+
+The Intouchables (2011), 112 min
+Genres: comedy, drama
+Countries: France
+Languages: French
+A wealthy quadriplegic hires a caregiver from the suburbs, and an unexpected friendship develops between them.
+Why: Комедия без романтики
+
+Mongol: The Rise of Genghis Khan (2007), 125 min
+Genres: action, biography, drama, history
+Countries: Казахстан, Russia, Germany
+Languages: Mongolian, Mandarin
+The story of Genghis Khan's youth, his rise as a leader, and his ascent to the throne.
+Why: Қазақстанда түсірілген.
+
+Ayka (2018), 100 min
+Genres: drama
+Countries: Казахстан, Russia, Germany, Poland, France, China
+Languages: Russian, Kyrgyz
+A Kyrgyz migrant in Moscow fights for the right to keep her child.
+Why: Қазақстанда түсірілген.
+
+Shal (2012), 102 min
+Genres: drama
+Countries: Казахстан
+Languages: Kazakh, Russian
+An elderly Kazakh returns to his native village and tries to understand what is happening around him.
+Why: Қазақстанда түсірілген.
+
+Shal (2012), 102 min
+Genres: drama
+Countries: Казахстан
+Languages: Kazakh, Russian
+An elderly Kazakh returns to his native village and tries to understand what is happening around him.
+Why: Космос және ғарыш туралы маңызды тақырыптарға баулынады.
+
+Arrival (2016), 116 min
+Genres: drama, science fiction, thriller
+Countries: USA
+Languages: English
+A linguist tries to establish contact with aliens after alien ships arrive on Earth.
+Why: Алғым алаңдарды кездестіргісі келетін тіл білімгерінің тарихында ғарыштық темалар бар, соғысы жоқ.
+
+The interface explicitly forbids choosing films not present in the catalog.
+No matching films found.
+Life is Beautiful (1997), 116 min
+Genres: comedy, drama
+Countries: Italy
+Languages: Italian
+A Jewish comedian uses humor and imagination to protect his son in a concentration camp.
+Why: A heartfelt drama with humor that explores resilience during tragedy.
+
+Baikonur (2011), 94 min
+Genres: comedy, drama, romance
+Countries: Казахстан, Germany, Russia
+Languages: Russian, English, French
+Iskander, a young man living on the Kazakh steppes, finds French astronaut Julie after her capsule crashes. Julie now has amnesia, but Iskander convinces her they are engaged.
+Why: A unique romantic comedy set against a sci-fi backdrop featuring amnesia and space travel.
+
+Oldboy (2003), 120 min
+Genres: thriller, drama
+Countries: South Korea
+Languages: Korean
+A man is imprisoned in a room for 15 years, then released with a mission to take revenge.
+Why: An intense Korean thriller involving imprisonment and vengeance.
+
+Outcome counts:
+  invalid: 1
+  no_match: 8
+  ok: 21
+Foreign IDs caught: []
+Filter violations: 0
+Model calls by step:
+  choice: 25
+  filters: 30
+Pass rate: 22/30 (73.3%)
+Failures:
+  query 1: 'A film about dreams within dreams' expected {'must': ['int-006']}, got no_match []
+  query 2: 'A story about a wrongfully imprisoned banker' expected {'must': ['int-001']}, got no_match []
+  query 8: 'A hacker discovers the world is a simulation' expected {'must': ['int-009']}, got invalid []
+  query 9: 'A musical romance in Los Angeles' expected {'must': ['int-010']}, got no_match []
+  query 15: 'A samurai village defends itself from bandits' expected {'must': ['int-016']}, got no_match []
+  query 16: 'A Kazakh film about a migrant mother in Moscow' expected {'must': ['kz-002']}, got no_match []
+  query 27: 'Ғарыш туралы фильм, бірақ соғыс емес' expected {'must': ['int-003']}, got ok ['kz-003', 'int-027']
+  query 30: 'Recommend me something good.' expected {'outcome': 'clarify'}, got ok ['int-018', 'kz-004', 'int-029']
+command exit: 1
+
+$ uv run show.py (after S07 fix)
+Calls: 172
+Outcomes:
+  invalid: 3
+  no_connection: 3
+  no_match: 13
+  ok: 153
+Models:
+  qwen3.5:4b: 172
+Tokens: prompt=183524, completion=9804, total=193328
+USD: 0.000000
+command exit: 0
