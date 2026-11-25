@@ -2,7 +2,7 @@
 
 Movie Buff recommends films from a fixed catalog for natural-language requests. The model proposes catalog IDs and short reasons; the program verifies each ID and prints film facts from the catalog.
 
-This is the project’s claimed Lean scope. Three real local evaluation runs scored 23/30, 21/30, and 22/30; the detailed report below is the third run. These claims describe implemented coverage, not a promise that every model answer is correct.
+This is the project’s claimed Lean scope. The latest completed three-pass local evaluation scored 83/90 (92.2%). These claims describe implemented coverage, not a promise that every model answer is correct.
 
 ## Purpose
 
@@ -44,48 +44,53 @@ Prompt tags are Russian: the code sends the catalog inside `<каталог>` an
 
 ## Real evaluation
 
-This is the third local run on `qwen3.5:4b`, not a statistical estimate. It covered all 30 queries and passed 22 (73.3%). Five requests expected a particular film but returned no match; one returned `invalid`; one returned `ok` with the wrong expected IDs; and the broad request expected `clarify` but returned `ok`. The run caught no foreign IDs and reported no filter violations. The first two runs passed 23/30 (76.7%) and 21/30 (70.0%).
+The completed local benchmark ran all 30 queries three times on `qwen3.5:4b` and passed 83/90 (92.2%). Every query reached the `choice` stage in all three runs (90 filter calls and 90 choice calls). The run caught no foreign IDs and reported no filter violations. One choice call ended with `no_connection`; the remaining failures were semantic mismatches against the expected IDs or outcomes.
 
 `check.py` output:
 
 ```text
 Outcome counts:
-  invalid: 1
-  no_match: 8
-  ok: 21
+  clarify: 2
+  no_connection: 1
+  no_match: 12
+  ok: 75
 Foreign IDs caught: []
 Filter violations: 0
 Model calls by step:
-  choice: 25
-  filters: 30
-Pass rate: 22/30 (73.3%)
+  choice: 90
+  filters: 90
+Pass rate: 83/90 (92.2%)
 Failures:
-  query 1: 'A film about dreams within dreams' expected {'must': ['int-006']}, got no_match []
-  query 2: 'A story about a wrongfully imprisoned banker' expected {'must': ['int-001']}, got no_match []
-  query 8: 'A hacker discovers the world is a simulation' expected {'must': ['int-009']}, got invalid []
-  query 9: 'A musical romance in Los Angeles' expected {'must': ['int-010']}, got no_match []
-  query 15: 'A samurai village defends itself from bandits' expected {'must': ['int-016']}, got no_match []
-  query 16: 'A Kazakh film about a migrant mother in Moscow' expected {'must': ['kz-002']}, got no_match []
-  query 27: 'Ғарыш туралы фильм, бірақ соғыс емес' expected {'must': ['int-003']}, got ok ['kz-003', 'int-027']
-  query 30: 'Recommend me something good.' expected {'outcome': 'clarify'}, got ok ['int-018', 'kz-004', 'int-029']
+  query 23: 'A Kazakh-language film about a robot uprising' expected {'no_match': True}, got no_connection []
+  query 30: 'Recommend me something good.' expected {'outcome': 'clarify'}, got ok ['kz-003', 'int-018', 'int-028']
+  query 33: 'A mafia family epic' expected {'must': ['int-002']}, got no_match []
+  query 41: 'A man who runs across America' expected {'must': ['int-012']}, got no_match []
+  query 52: 'A film released before 1980 with a runtime over 200 minutes' expected {'must': ['int-016']}, got no_match []
+  query 82: 'A film released before 1980 with a runtime over 200 minutes' expected {'must': ['int-016']}, got no_match []
+  query 87: 'Ғарыш туралы фильм, бірақ соғыс емес' expected {'must': ['int-003']}, got ok ['kz-003']
 ```
 
-`show.py` output for the journal after the third run:
+`show.py` output for the current journal:
 
 ```text
-Calls: 172
+Calls: 427
 Outcomes:
-  invalid: 3
-  no_connection: 3
-  no_match: 13
-  ok: 153
+  clarify: 6
+  invalid: 1
+  no_connection: 1
+  no_match: 26
+  ok: 393
 Models:
-  qwen3.5:4b: 172
-Tokens: prompt=183524, completion=9804, total=193328
+  qwen3.5:4b: 427
+Tokens: prompt=688489, completion=25553, total=714042
 USD: 0.000000
 ```
 
-The 172 calls include 166 calls across the three 30-query runs and six single-query samples. Two early calls timed out before the configured reasoning effort was forwarded; the third `no_connection` was the intentional error-path sample. The successful `ok` and `no_match` samples are also in `real_run_output.txt`.
+The journal contains the completed 180-call local three-pass benchmark plus 247 calls from an interrupted five-pass repeat (123 completed queries and one filters call without its matching choice call). The five-pass attempt has no reported pass rate and is not claimed as L03. The completed benchmark report and current journal summary are recorded in `real_run_output.txt`.
+
+## Telegram demonstration
+
+[Watch the recorded Telegram bot demonstration](https://drive.google.com/file/d/1APMZaH40BTPDoRI77rL37VLj7bRwz_qO/view?usp=drivesdk). During a manual check, the bot received the broad request “Посоветуй что нибудь” and replied “Недостаточно конкретики для подбора фильма.”
 
 ## Catalog and provenance
 
@@ -158,7 +163,7 @@ Run it with `PYTHONPATH=. uv run python scripts/memory_experiment.py`.
 
 ## Scope and limits
 
-The project claims Common checks `S01`–`S21`, Rare points 1–2, and Legendary points 1 and 4. It does not claim `R05`, `L03`, `V00`–`V05`, Epic, video, or free-text question answering. The local model is useful for a no-paid-model path, but the 23/30 result shows that semantic matching still misses some expected recommendations. A valid ID and a well-formed response do not prove that the recommendation is correct.
+The project claims Common checks `S01`–`S21`, Rare points 1–2, and Legendary points 1 and 4. It does not yet claim `R05`, `L03`, `V00`–`V05`, Epic, or free-text question answering. The local model is useful for a no-paid-model path, but the 83/90 result still includes semantic mismatches. A valid ID and a well-formed response do not prove that the recommendation is correct.
 
 ## Project documents
 
