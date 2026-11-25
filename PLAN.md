@@ -189,6 +189,48 @@
   - Test: все `S`-checks green and `uv run pytest -q` green.
   - Done: `uv run pytest -q`; commit `chore: pass autocheck`.
 
+## Phase 7 — Common 100% completion
+
+- [ ] **Step 32. Root `films.json` delivery copy**
+  - Do: add `films.json` at the repository root as an exact copy of `data/en/films.json`; keep `data/en/films.json` for `S03`.
+  - Test: `tests/test_artifacts.py` asserts both files parse to the same object.
+  - Done: `uv run pytest -q`; commit `fix: add root catalog delivery copy`.
+
+- [ ] **Step 33. Isolate the test journal**
+  - Do: add an autouse fixture in `tests/conftest.py` that points `kino.JOURNAL_PATH` at `tmp_path`; verify `tests/test_cli.py` no longer writes the real `calls.jsonl`.
+  - Test: run the suite twice; `git diff --exit-code calls.jsonl` stays clean.
+  - Done: `uv run pytest -q`; commit `test: isolate the model-call journal`.
+
+- [ ] **Step 34. README journal numbers and English-tag note**
+  - Do: change the answer-5 “62 calls” to the final 172-call journal and mention the first 62-call run explicitly; add a note that `S18` and the probe expect `<catalog>`/`<query>`, so the tags stay English.
+  - Test: `tests/test_readme.py` still passes; grep finds `172` and `first 62-call run`.
+  - Done: `uv run pytest -q`; commit `docs: align README journal numbers and prompt tags`.
+
+- [ ] **Step 35. Catalog-only memory experiment**
+  - Do: replace the four non-catalog films with catalog films; rerun the experiment on `qwen3.5:4b`; update `memory_calls.jsonl`, README prompt/table/discrepancy count, and the memory test.
+  - Test: `tests/test_memory_experiment.py`, `tests/test_readme.py`, `tests/test_artifacts.py`.
+  - Done: `uv run pytest -q`; commit `data: run memory experiment on catalog films`.
+
+- [ ] **Step 36. Remove the unused film module**
+  - Do: delete `modules/film/__init__.py` (unused duplicate of `schemas.py`) and the empty `modules/` tree if nothing else remains.
+  - Test: `uv run pytest -q`; `ruff check`.
+  - Done: `uv run pytest -q`; commit `chore: remove unused film module`.
+
+- [ ] **Step 37. Guard empty model choices**
+  - Do: in `kino._call_model`, return `(None, "invalid")` when `completion.choices` is empty, before indexing.
+  - Test: add a fake-client case with `choices=[]`; process does not crash.
+  - Done: `uv run pytest -q`; commit `fix: handle empty model choices`.
+
+- [ ] **Step 38. Repository hygiene for local tooling**
+  - Do: revert `.codex/config.toml`; add `checks/` and `examples/` to `.gitignore`; keep `network_access` out of the delivery.
+  - Test: `git status` has no `.codex` change; `.gitignore` contains both paths.
+  - Done: `uv run pytest -q`; commit `chore: ignore local autocheck and examples`.
+
+- [ ] **Step 39. Owner acceptance**
+  - Do: owner restores `checks/`, commits, then runs `python3 -I checks/kino_check.py .` and `--live`; verifies `S01–S21`, `R02–R04`, `L02`, the Telegram bot, and three catalog facts.
+  - Test: all claimed checks green; `calls.jsonl` unchanged.
+  - Done: owner confirms; no agent commit.
+
 ## Do not break
 
 - `pick` does not read `data/en/films.json`, does not validate catalog fields and prints films itself.
