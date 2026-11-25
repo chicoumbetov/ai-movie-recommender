@@ -753,3 +753,13 @@ Models:
 Tokens: prompt=183524, completion=9804, total=193328
 USD: 0.000000
 command exit: 0
+
+$ PYTHONPATH=. uv run python scripts/memory_experiment.py (catalog-only films)
+Outcome: ok
+Films compared: 10
+Discrepancies: 4
+  The Godfather — minutes: expected 175, got 172
+  Pulp Fiction — minutes: expected 154, got 153
+  Titanic — minutes: expected 195, got 196
+  Spirited Away — minutes: expected 125, got 135
+command exit: 0

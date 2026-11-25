@@ -52,5 +52,5 @@ def test_wrong_year_and_runtime_count_as_two_discrepancies(
     assert report.discrepancy_count == 2
     assert report.discrepancies == [
         {"title": memory.FILMS[0].title, "field": "year", "expected": 1972, "actual": 1973},
-        {"title": memory.FILMS[1].title, "field": "minutes", "expected": 102, "actual": 103},
+        {"title": memory.FILMS[1].title, "field": "minutes", "expected": 142, "actual": 143},
     ]

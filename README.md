@@ -113,52 +113,51 @@ Answer from your existing knowledge. For each listed film, provide its original 
 
 Give the year and runtime for each of these films:
 - The Godfather
-- Casablanca
-- Jaws
-- Alien
+- The Shawshank Redemption
+- Pulp Fiction
+- Forrest Gump
 - Titanic
 - Inception
 - Spirited Away
 - Parasite
 - The Matrix
-- The Wizard of Oz
+- The Dark Knight
 ```
 
-The report compared all ten films and found five runtime discrepancies. The five other films matched their reference values. These are the model’s answers and the experiment’s reference values:
+The report compared all ten films and found four runtime discrepancies. The six other films matched their reference values. These are the model’s answers and the experiment’s reference values:
 
 | Film | Reference year / runtime | Model year / runtime | Result |
 | --- | --- | --- | --- |
-| The Godfather | 1972 / 175 min | 1972 / 178 min | Runtime differs |
-| Casablanca | 1942 / 102 min | 1942 / 105 min | Runtime differs |
-| Jaws | 1975 / 124 min | 1975 / 116 min | Runtime differs |
-| Alien | 1979 / 117 min | 1979 / 111 min | Runtime differs |
+| The Godfather | 1972 / 175 min | 1972 / 172 min | Runtime differs |
+| The Shawshank Redemption | 1994 / 142 min | 1994 / 142 min | Match |
+| Pulp Fiction | 1994 / 154 min | 1994 / 153 min | Runtime differs |
+| Forrest Gump | 1994 / 142 min | 1994 / 142 min | Match |
 | Titanic | 1997 / 195 min | 1997 / 196 min | Runtime differs |
 | Inception | 2010 / 148 min | 2010 / 148 min | Match |
-| Spirited Away | 2001 / 125 min | 2001 / 125 min | Match |
+| Spirited Away | 2001 / 125 min | 2001 / 135 min | Runtime differs |
 | Parasite | 2019 / 132 min | 2019 / 132 min | Match |
 | The Matrix | 1999 / 136 min | 1999 / 136 min | Match |
-| The Wizard of Oz | 1939 / 102 min | 1939 / 102 min | Match |
+| The Dark Knight | 2008 / 152 min | 2008 / 152 min | Match |
 
-The reference facts are experiment fixtures, not all current catalog entries: Casablanca, Jaws, Alien, and The Wizard of Oz are not in `data/en/films.json`. For the six titles that are in that catalog, the reference values match its year and runtime fields. The experiment writes to its separate `memory_calls.jsonl` journal.
+All ten titles are in `data/en/films.json`, and the reference values match its year and runtime fields. The experiment writes to its separate `memory_calls.jsonl` journal.
 
 The real report:
 
 ```text
 Outcome: ok
 Films compared: 10
-Discrepancies: 5
-  The Godfather — minutes: expected 175, got 178
-  Casablanca — minutes: expected 102, got 105
-  Jaws — minutes: expected 124, got 116
-  Alien — minutes: expected 117, got 111
+Discrepancies: 4
+  The Godfather — minutes: expected 175, got 172
+  Pulp Fiction — minutes: expected 154, got 153
   Titanic — minutes: expected 195, got 196
+  Spirited Away — minutes: expected 125, got 135
 ```
 
 Run it with `PYTHONPATH=. uv run python scripts/memory_experiment.py`.
 
 ## Assignment questions
 
-1. **Why check IDs when titles are clearer, and how many memory discrepancies occurred?** Titles can have aliases or translations; the catalog ID is the stable key. Code resolves each returned ID against the candidate catalog. The memory experiment found five discrepancies. See `kino.py:575–583` and `scripts/memory_experiment.py:85–125`.
+1. **Why check IDs when titles are clearer, and how many memory discrepancies occurred?** Titles can have aliases or translations; the catalog ID is the stable key. Code resolves each returned ID against the candidate catalog. The memory experiment found four discrepancies. See `kino.py:575–583` and `scripts/memory_experiment.py:85–125`.
 2. **What if the model returns an ID outside the catalog?** The ID is recorded as rejected, the result becomes invalid, and no film is printed. See `kino.py:581–583` and `kino.py:532–545`.
 3. **How is a valid response different from a correct recommendation?** A response can parse and contain valid IDs but still miss the expected film. `check.py` compares returned outcomes and IDs with each query’s expectation and counts failures. See `check.py:47–65` and `check.py:118–138`.
 4. **What can a non-ML solution do, and what does it miss here?** Exact rules can filter by year, runtime, language, and genre. They do not infer that “a poor family infiltrating a rich household” describes a film unless the query matches stored metadata or text rules. The current code applies explicit filters in `kino.py:267–299`.

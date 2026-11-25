@@ -25,15 +25,15 @@ class FilmFact:
 
 FILMS: tuple[FilmFact, ...] = (
     FilmFact("The Godfather", 1972, 175),
-    FilmFact("Casablanca", 1942, 102),
-    FilmFact("Jaws", 1975, 124),
-    FilmFact("Alien", 1979, 117),
+    FilmFact("The Shawshank Redemption", 1994, 142),
+    FilmFact("Pulp Fiction", 1994, 154),
+    FilmFact("Forrest Gump", 1994, 142),
     FilmFact("Titanic", 1997, 195),
     FilmFact("Inception", 2010, 148),
     FilmFact("Spirited Away", 2001, 125),
     FilmFact("Parasite", 2019, 132),
     FilmFact("The Matrix", 1999, 136),
-    FilmFact("The Wizard of Oz", 1939, 102),
+    FilmFact("The Dark Knight", 2008, 152),
 )
 
 

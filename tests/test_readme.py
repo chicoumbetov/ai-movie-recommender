@@ -78,9 +78,9 @@ def test_readme_catalog_date_and_memory_answers_come_from_artifacts() -> None:
     assert next(iter(retrieved_dates)) in readme
     assert "2026-11-24T11:32:41Z" in readme
     assert "The Godfather" in readme
-    assert "Casablanca" in readme
-    assert "Jaws" in readme
-    assert "Alien" in readme
+    assert "The Shawshank Redemption" in readme
+    assert "Pulp Fiction" in readme
+    assert "Forrest Gump" in readme
     assert "Titanic" in readme
     for source in (
         "https://en.wikipedia.org/wiki/Ayka",
@@ -99,6 +99,6 @@ def test_readme_catalog_date_and_memory_answers_come_from_artifacts() -> None:
     ):
         assert runtime_row in readme
     assert "Films compared: 10" in readme
-    assert "Discrepancies: 5" in readme
+    assert "Discrepancies: 4" in readme
     assert len(memory_rows) == 1
     assert len(memory_rows[0]["request"]["titles"]) == 10

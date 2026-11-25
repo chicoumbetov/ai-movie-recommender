@@ -206,7 +206,7 @@
   - Test: `tests/test_readme.py` still passes; grep finds `172` and `first 62-call run`.
   - Done: `uv run pytest -q`; commit `docs: align README journal numbers and prompt tags`.
 
-- [ ] **Step 35. Catalog-only memory experiment**
+- [x] **Step 35. Catalog-only memory experiment**
   - Do: replace the four non-catalog films with catalog films; rerun the experiment on `qwen3.5:4b`; update `memory_calls.jsonl`, README prompt/table/discrepancy count, and the memory test.
   - Test: `tests/test_memory_experiment.py`, `tests/test_readme.py`, `tests/test_artifacts.py`.
   - Done: `uv run pytest -q`; commit `data: run memory experiment on catalog films`.
