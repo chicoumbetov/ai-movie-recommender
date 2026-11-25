@@ -9,6 +9,19 @@ from typing import Any
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def isolated_journal(tmp_path: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Keep every test away from the committed real-run journal."""
+    import utils
+
+    original_log = utils.log
+
+    def isolated_log(*args: Any, path: str | Any = None, **kwargs: Any) -> None:
+        original_log(*args, path=tmp_path / "calls.jsonl" if path is None else path, **kwargs)
+
+    monkeypatch.setattr(utils, "log", isolated_log)
+
+
 def make_film(
     film_id: str | int,
     title: str,
