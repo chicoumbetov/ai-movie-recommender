@@ -18,10 +18,10 @@ def test_user_message_has_tags_and_whole_catalog(catalog: list[dict[str, Any]]) 
     from kino import build_messages
 
     user = build_messages(catalog, "a quiet film")[1]["content"]
-    assert "<catalog>" in user
-    assert "</catalog>" in user
-    assert "<query>" in user
-    assert "</query>" in user
+    assert "<каталог>" in user
+    assert "</каталог>" in user
+    assert "<запрос>" in user
+    assert "</запрос>" in user
     assert json.dumps(catalog, ensure_ascii=False) in user
 
 
@@ -72,4 +72,4 @@ def test_empty_query_still_escapes(catalog: list[dict[str, Any]]) -> None:
     from kino import build_messages
 
     user = build_messages(catalog, "")[1]["content"]
-    assert "<query>\n\n</query>" in user
+    assert "<запрос>\n\n</запрос>" in user

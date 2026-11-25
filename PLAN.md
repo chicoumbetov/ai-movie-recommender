@@ -226,8 +226,13 @@
   - Test: `git status` has no `.codex` change; `.gitignore` contains both paths.
   - Done: `uv run pytest -q`; commit `chore: ignore local autocheck and examples`.
 
-- [ ] **Step 39. Owner acceptance**
-  - Do: owner restores `checks/`, commits, then runs `python3 -I checks/kino_check.py .` and `--live`; verifies `S01–S21`, `R02–R04`, `L02`, the Telegram bot, and three catalog facts.
+- [x] **Step 39. Russian prompt tags required by S18**
+  - Do: switch prompt delimiters to `<каталог>`/`<запрос>`; update `SPEC.md` §4 and §6, `docs/decisions.md`, README and prompt tests; exclude the local `check/` copy from Ruff.
+  - Test: `uv run pytest -q`; `uv run ruff check`; autocheck `S18` green.
+  - Done: `uv run pytest -q`; commit `fix: use Russian prompt tags required by S18`.
+
+- [ ] **Step 40. Owner acceptance**
+  - Do: owner restores `check/`, commits, then runs `python3 -I check/kino_check.py .` and `--live`; verifies `S01–S21`, `R02–R04`, `L02`, the Telegram bot, and three catalog facts.
   - Test: all claimed checks green; `calls.jsonl` unchanged.
   - Done: owner confirms; no agent commit.
 

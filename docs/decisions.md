@@ -78,12 +78,12 @@ choices and reasons. It does not restate the contract.
 
 ## Prompt and protection
 
-- Tags are defined only in `SPEC.md` §6: English `<catalog>`, `</catalog>`, `<query>`,
-  `</query>`. The probe expects these exact tags.
+- Tags are defined only in `SPEC.md` §6: Russian `<каталог>`, `</каталог>`, `<запрос>`,
+  `</запрос>`. Autocheck `S18` expects these exact tags; the PDF wording matches them.
 - Catalog is serialized with `json.dumps(..., ensure_ascii=False)`.
 - The query is escaped with `html.escape(query, quote=False)`.
 - The system prompt contains exactly one full response example.
-- The full runtime catalog appears only inside `<catalog>`.
+- The full runtime catalog appears only inside `<каталог>`.
 - Catalog strings do not contain prompt tags or ASCII control characters.
 - The model has no tools and cannot retrieve a film outside the catalog.
 

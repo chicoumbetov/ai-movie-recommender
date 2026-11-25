@@ -111,7 +111,7 @@ def test_tags_and_control_characters_are_forbidden() -> None:
 
     films = real_catalog()
     broken = copy.deepcopy(films)
-    broken[0]["title"] = "Bad <catalog> title"
+    broken[0]["title"] = "Bad <каталог> title"
     broken[1]["description"] = "Has a control char \x07 inside a long enough text."
     problems = kino.validate_catalog(broken)
     assert len(problems) >= 2

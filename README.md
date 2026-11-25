@@ -40,7 +40,7 @@ The command form for a request is `uv run kino.py "..." `. Replace the dots with
 
 The model does not supply titles, years, runtimes, genres, countries, languages, or descriptions. An answer that names a foreign ID is rejected and never shown.
 
-Prompt tags are English: the code sends the catalog inside `<catalog>` and the request inside `<query>`. The mentor autocheck (`kino_check.py`) and its probe (`kino_probe.py`) require these exact tags, so the PDF's `<каталог>`/`<запрос>` wording is not used. This is the only tag form the acceptance check reads.
+Prompt tags are Russian: the code sends the catalog inside `<каталог>` and the request inside `<запрос>`. The mentor autocheck `S18` requires these exact tags, so they match the PDF wording. An earlier version used English `<catalog>`/`<query>` and failed `S18`.
 
 ## Real evaluation
 
