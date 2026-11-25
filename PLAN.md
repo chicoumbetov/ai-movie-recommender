@@ -216,7 +216,7 @@
   - Test: `uv run pytest -q`; `ruff check`.
   - Done: `uv run pytest -q`; commit `chore: remove unused film module`.
 
-- [ ] **Step 37. Guard empty model choices**
+- [x] **Step 37. Guard empty model choices**
   - Do: in `kino._call_model`, return `(None, "invalid")` when `completion.choices` is empty, before indexing.
   - Test: add a fake-client case with `choices=[]`; process does not crash.
   - Done: `uv run pytest -q`; commit `fix: handle empty model choices`.

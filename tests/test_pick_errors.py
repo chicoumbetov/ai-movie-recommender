@@ -144,3 +144,31 @@ def test_journal_is_written_on_every_error(
     assert len(rows) == 1
     assert rows[0]["request"]["query"] == "query"
     assert "usage" not in rows[0]
+
+
+def test_empty_choices_in_choice_stage_is_invalid(
+    catalog: list[dict[str, Any]], fake_client_factory: Any, tmp_path: Path, capsys: Any
+) -> None:
+    from conftest import FakeParseResult
+
+    empty = FakeParseResult(id="chatcmpl-empty", model="fake-model", usage=None, choices=[])
+    client = fake_client_factory([Filters(), empty])
+
+    outcome, ids = _run(client, catalog, tmp_path / "calls.jsonl")
+
+    assert (outcome, ids) == ("invalid", [])
+    assert capsys.readouterr().out == ""
+
+
+def test_empty_choices_in_filter_stage_is_invalid(
+    catalog: list[dict[str, Any]], fake_client_factory: Any, tmp_path: Path, capsys: Any
+) -> None:
+    from conftest import FakeParseResult
+
+    empty = FakeParseResult(id="chatcmpl-empty", model="fake-model", usage=None, choices=[])
+    client = fake_client_factory([empty])
+
+    outcome, ids = _run(client, catalog, tmp_path / "calls.jsonl")
+
+    assert (outcome, ids) == ("invalid", [])
+    assert capsys.readouterr().out == ""

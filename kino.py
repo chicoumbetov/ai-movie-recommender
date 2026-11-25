@@ -442,6 +442,9 @@ def _call_model(
         )
         return (None, "invalid")
 
+    if not completion.choices:
+        return (None, "invalid")
+
     choice = completion.choices[0]
     if getattr(choice.message, "refusal", None):
         return (completion, "refusal")
