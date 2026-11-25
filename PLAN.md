@@ -221,7 +221,7 @@
   - Test: add a fake-client case with `choices=[]`; process does not crash.
   - Done: `uv run pytest -q`; commit `fix: handle empty model choices`.
 
-- [ ] **Step 38. Repository hygiene for local tooling**
+- [x] **Step 38. Repository hygiene for local tooling**
   - Do: revert `.codex/config.toml`; add `checks/` and `examples/` to `.gitignore`; keep `network_access` out of the delivery.
   - Test: `git status` has no `.codex` change; `.gitignore` contains both paths.
   - Done: `uv run pytest -q`; commit `chore: ignore local autocheck and examples`.
