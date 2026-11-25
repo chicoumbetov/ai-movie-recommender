@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import re
 import sys
 import time
@@ -414,10 +415,15 @@ def _call_model(
 ) -> tuple[Any | None, str]:
     """Make one parse call and map transport, refusal and truncation to outcomes."""
     try:
+        reasoning_effort = os.environ.get("REASONING_EFFORT", "").strip()
+        options: dict[str, Any] = {}
+        if reasoning_effort:
+            options["extra_body"] = {"reasoning_effort": reasoning_effort}
         completion = client.chat.completions.parse(
             model=model,
             messages=messages,
             response_format=response_format,
+            **options,
         )
     except APITimeoutError:
         return (None, "no_connection")

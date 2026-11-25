@@ -173,7 +173,7 @@
   - Test: `tests/test_memory_experiment.py` — fake client, exact and incorrect answers, separate journal, discrepancy counter.
   - Done: `uv run pytest -q`; commit `feat: model-memory experiment`.
 
-- [ ] **Step 29. Real runs on `qwen3.5:4b`**
+- [x] **Step 29. Real runs on `qwen3.5:4b`**
   - Do: `uv run check.py` across all 30 queries; `uv run show.py`; `uv run kino.py "..."` for `ok`, `no_match` and error; `uv run python scripts/memory_experiment.py`. commiting `calls.jsonl` and `memory_calls.jsonl`, output is saved for README.
   - Test: `tests/test_artifacts.py` — `calls.jsonl` covers all 30 queries, model not stub, has `ok` and `no_match`; memory report contains 10 films.
   - Done: `uv run pytest -q`; commit `data: add real model runs`.
