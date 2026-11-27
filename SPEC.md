@@ -22,7 +22,10 @@ every film fact from the catalog. A film outside the catalog is never shown. [A]
 ## 3. Scope — Lean path
 
 Claimed: Common 100% (`S01`–`S21`), Rare points 1–2, Legendary points 1 and 4. [A]
-Not claimed: `R05`, `L03`, `V00`–`V05`, Epic, video, free-text Q&A. [P]
+Not claimed: `R05` (the cloud attempt hit HTTP 429 under the 180-call cap), `V00`–`V05`, Epic,
+free-text Q&A. [P]
+`L03` is satisfied by the local five-run journal; it is repeatability evidence, not an additional
+claimed point. [P]
 Out of scope: web UI, accounts, database, Docker, webhook, group chats, real-time APIs. [A]
 
 ## 4. Catalog — `data/en/films.json`

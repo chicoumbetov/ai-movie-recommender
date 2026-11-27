@@ -67,3 +67,8 @@ def test_evaluation_queries_match_step_19_contract() -> None:
     assert injection_count >= 1
     assert strict_filter_count >= 3
     assert sum(query["expect"].get("outcome") == "clarify" for query in queries) >= 1
+    assert any(
+        query["query"] == "A Kazakh-language film about a robot uprising"
+        and query["expect"].get("no_match") is True
+        for query in queries
+    )

@@ -53,7 +53,7 @@ def test_readme_has_lean_claim_structure_and_required_commands() -> None:
 def test_readme_real_run_blocks_match_saved_outputs_and_journal() -> None:
     readme = README_PATH.read_text(encoding="utf-8")
     output = (ROOT / "real_run_output.txt").read_text(encoding="utf-8")
-    calls = [row for row in read_rows(ROOT / "calls.jsonl") if row.get("model") == "qwen3.5:4b"]
+    calls = read_rows(ROOT / "calls.jsonl")
 
     assert format_report(aggregate(calls)) in readme
 

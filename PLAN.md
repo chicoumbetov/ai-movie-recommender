@@ -241,12 +241,12 @@
   - Test: `tests/test_check_runner.py` checks the cloud profile and model; `uv run pytest -q`; `uv run ruff check`.
   - Done: `uv run pytest -q`; commit `feat: add cloud profile for the R05 benchmark`.
 
-- [ ] **Step 42. Clarify a general request**
+- [x] **Step 42. Clarify a general request**
   - Do: the system prompt returns `clarify` for a request with no usable preference and never uses `no_match` for it; the bot writes its calls to `bot_calls.jsonl` so the evaluation journal stays stable.
   - Test: `tests/test_prompt.py` checks the clarify rule; `tests/test_bot_handlers.py` checks the bot journal path; a local model check of `Recommend me something good.` and `Посоветуй что нибудь` returns `clarify`.
   - Done: `uv run pytest -q`; commit `fix: clarify a general request and isolate bot calls`.
 
-- [ ] **Step 43. Russian catalog mirror**
+- [x] **Step 43. Russian catalog mirror**
   - Do: sync `data/ru/films.json` with the English facts (year, minutes, genre/country/language sets) and Russian labels; keep titles and descriptions Russian and the token `Казахстан` exact; update README and `docs/decisions.md`.
   - Test: `tests/test_catalog_translation.py` compares every record with a fixed label map; `uv run pytest -q`.
   - Done: `uv run pytest -q`; commit `data: sync the Russian catalog with the English facts`.
@@ -255,11 +255,19 @@
   - Do: make every query reach the `choice` stage, then run `uv run check.py --profile local --runs 3` and `uv run check.py --profile cloud --runs 3`; add a README table with pass rate, foreign IDs, seconds, and price for both models.
   - Test: autocheck `R05` green (`sum(n >= 3) >= 2`); README numbers match `calls.jsonl` and `show.py`.
   - Done: `uv run pytest -q`; commit `data: add two-model R05 benchmark`.
+  - Status: not complete. The local three-run benchmark is recorded. The cloud three-run attempt
+    stopped on HTTP 429 after 98 calls: 6 queries succeeded and 84 requests ended `error_429`;
+    the measured report was 9/90 (10.0%) under the `check.py` rule, and the provider charged
+    $0.003016. The owner kept the 180-call cap and chose to leave R05 unclaimed; the attempt is
+    recorded in `calls.jsonl` and README.
 
-- [ ] **Step 45. L03: one model, five runs**
+- [x] **Step 45. L03: one model, five runs**
   - Do: run the same set five times on `qwen3.5:4b`; add the all-five-runs pass rate next to the single-run rate in README.
   - Test: autocheck `L03` green (`any(n >= 5)`); README numbers match the journal.
   - Done: `uv run pytest -q`; commit `data: add five-run L03 repeatability`.
+  - Status: done. Clean local report: 143/150 (95.3%); 25/30 queries passed all five runs;
+    each query has at least 17 `choice` rows in `calls.jsonl`. The journal totals are in README
+    and come from `show.py`.
 
 - [ ] **Step 46. Owner acceptance**
   - Do: owner restores `check/`, commits, then runs `python3 -I check/kino_check.py .` and `--live`; verifies `S01–S21`, `R02–R05`, `L02–L03`, the Telegram bot, the video link, and three catalog facts.

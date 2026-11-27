@@ -6,7 +6,7 @@ choices and reasons. It does not restate the contract.
 ## Scope
 
 - Lean path: Common 100%, checks `S01`–`S21`, Rare 1–2, Legendary 1 and 4: Telegram bot and the local `$0` model. This line is the source of truth for the claimed levels.
-- Not claimed: `R05` (two-model comparison), `L03` (five runs), `V00`–`V05` (`--live` with the mentor), video. README must state this explicitly.
+- Not claimed: `R05` (the cloud three-run attempt hit HTTP 429 under the owner’s 180-call cap), `V00`–`V05` (`--live` with the mentor). `L03` is satisfied by the local five-run journal but is not a separate claimed point. A recorded Telegram demonstration is linked from the README.
 - Epic (1000+ catalog, `candidates()`, `pick_big()`, embeddings/TF-IDF) is out of scope.
 - Free-text Q&A is an unclaimed bonus; it is not built and is not part of Common.
 - README is written only after real runs; numbers come from `calls.jsonl` and `memory_calls.jsonl`, never from estimates.
@@ -52,6 +52,10 @@ choices and reasons. It does not restate the contract.
 
 - Default: local `qwen3.5:4b` via Ollama, `reasoning_effort="none"`.
 - Cloud fallback: `gpt-6-luna`, opt-in only through `.env`.
+- Cloud benchmark: the `OPENAI_CLOUD_*` profile selects `gpt-6-luna`. A 30-query ×3 attempt
+  made 98 calls before the API returned HTTP 429; 6 queries succeeded and 84 requests ended
+  `error_429`. The owner kept the 180-call cap, so `R05` remains unclaimed. The failed rows stay
+  in `calls.jsonl` as evidence and are not deleted.
 - The model is not hardcoded: `pick` receives it as an argument.
 - One OpenAI client per process, `max_retries=0`, timeout 60 seconds.
 - Tests never create a real client; only a fake.

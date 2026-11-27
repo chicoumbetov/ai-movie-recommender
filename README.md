@@ -2,7 +2,7 @@
 
 Movie Buff recommends films from a fixed catalog for natural-language requests. The model proposes catalog IDs and short reasons; the program verifies each ID and prints film facts from the catalog.
 
-This is the project’s claimed Lean scope. The latest completed three-pass local evaluation scored 83/90 (92.2%). These claims describe implemented coverage, not a promise that every model answer is correct.
+This is the project’s claimed Lean scope. The completed three-pass local evaluation scored 83/90 (92.2%), and the five-run local report scored 143/150 (95.3%). These claims describe implemented coverage, not a promise that every model answer is correct.
 
 ## Purpose
 
@@ -44,9 +44,38 @@ Prompt tags are Russian: the code sends the catalog inside `<каталог>` an
 
 ## Real evaluation
 
-The completed local benchmark ran all 30 queries three times on `qwen3.5:4b` and passed 83/90 (92.2%). Every query reached the `choice` stage in all three runs (90 filter calls and 90 choice calls). The run caught no foreign IDs and reported no filter violations. One choice call ended with `no_connection`; the remaining failures were semantic mismatches against the expected IDs or outcomes.
+The local three-run benchmark ran all 30 queries three times on `qwen3.5:4b` and passed 83/90
+(92.2%). Every query reached the `choice` stage (90 filter calls and 90 choice calls). It caught
+no foreign IDs and reported no filter violations. The local model has no API price, so the
+journal reports $0 for these calls.
 
-`check.py` output:
+A separate five-run local report is recorded in `real_run_output.txt` and `calls.jsonl`. It
+passed **143/150 (95.3%)**, and 25 of 30 queries passed in all five runs (83.3%). The individual
+runs passed 29/30, 30/30, 29/30, 28/30 and 27/30. Every request reached the `choice` stage
+(150 filter calls and 150 choice calls). This is the L03 evidence: every query has at least five
+`choice` rows in the local journal.
+
+### Cloud R05 attempt
+
+The cloud profile (`gpt-6-luna`) was tried for the two-model R05 comparison. The three-run
+attempt made 98 calls before the API returned HTTP 429: 6 queries returned a real answer, 84
+requests ended `error_429`, and the provider charged $0.003016 for the completed calls. Under
+the owner’s 180-call cap, a clean 30-query ×3 run could not be completed, so R05 remains
+unclaimed. The failed rows stay in `calls.jsonl`; they are not hidden or deleted. The measured
+cloud report is 9/90 (10.0%) under the `check.py` rule, but only 6 of those were real answers;
+the other three are `forbid`-only queries that pass with empty IDs even on an error.
+
+| Benchmark | Model | Calls | Pass rate | Foreign IDs | Seconds | USD |
+|---|---|---|---|---|---|---|
+| Local ×3 | `qwen3.5:4b` | 180 | 83/90 (92.2%) | 0 | 894.0 | $0 |
+| Local ×5 | `qwen3.5:4b` | 300 | 143/150 (95.3%) | 0 | 1425.8 | $0 |
+| Cloud ×3 attempt (stopped) | `gpt-6-luna` | 98 | 9/90 (10.0%) | 0 | 32.5 | $0.003016 |
+
+The cloud row is the failed attempt: 84 of its 98 calls ended `error_429`, and only 6 queries
+returned a real answer. It is shown for transparency, not as a completed R05 comparison. The
+seconds and USD values are sums from the corresponding `calls.jsonl` rows.
+
+`check.py` output for the local three-run benchmark:
 
 ```text
 Outcome counts:
@@ -70,23 +99,53 @@ Failures:
   query 87: 'Ғарыш туралы фильм, бірақ соғыс емес' expected {'must': ['int-003']}, got ok ['kz-003']
 ```
 
-`show.py` output for the current journal:
+Local five-run report (film output suppressed; the journal still records every call):
 
 ```text
-Calls: 427
-Outcomes:
-  clarify: 6
+Outcome counts:
+  clarify: 5
   invalid: 1
-  no_connection: 1
-  no_match: 26
-  ok: 393
-Models:
-  qwen3.5:4b: 427
-Tokens: prompt=688489, completion=25553, total=714042
-USD: 0.000000
+  no_match: 19
+  ok: 125
+Foreign IDs caught: []
+Filter violations: 0
+Model calls by step:
+  choice: 150
+  filters: 150
+Pass rate: 143/150 (95.3%)
+Failures:
+  query 22: 'A film released before 1980 with a runtime over 200 minutes' expected {'must': ['int-016']}, got no_match []
+  query 82: 'A film released before 1980 with a runtime over 200 minutes' expected {'must': ['int-016']}, got no_match []
+  query 112: 'A film released before 1980 with a runtime over 200 minutes' expected {'must': ['int-016']}, got no_match []
+  query 116: 'Қазақстанда түсірілген фильм' expected {'must': ['kz-001', 'kz-002', 'kz-003', 'kz-004', 'kz-005']}, got invalid []
+  query 123: 'A mafia family epic' expected {'must': ['int-002']}, got no_match []
+  query 144: 'Фильм про космос, но не про войну' expected {'must': ['int-003']}, got ok ['int-027', 'int-035']
+  query 147: 'Ғарыш туралы фильм, бірақ соғыс емес' expected {'must': ['int-003']}, got ok ['int-035', 'int-027']
 ```
 
-The journal contains the completed 180-call local three-pass benchmark plus 247 calls from an interrupted five-pass repeat (123 completed queries and one filters call without its matching choice call). The five-pass attempt has no reported pass rate and is not claimed as L03. The completed benchmark report and current journal summary are recorded in `real_run_output.txt`.
+`show.py` output for the full journal:
+
+```text
+Calls: 1347
+Outcomes:
+  clarify: 17
+  error_429: 84
+  invalid: 8
+  no_connection: 4
+  no_match: 88
+  ok: 1146
+Models:
+  gpt-6-luna: 98
+  qwen3.5:4b: 1249
+Tokens: prompt=1927525, completion=75268, total=2002793
+USD: 0.003016
+```
+
+The journal keeps 172 earlier local calls restored from the previous commit, the local three-run
+benchmark, the completed five-run repeat, the cloud 429 attempt, an interrupted extra local report
+attempt, and the clean five-run report. The `show.py` totals cover every row, including the failed
+cloud calls and the restored earlier calls. The pass rates above come from the corresponding
+reports, not from the journal totals.
 
 ## Telegram demonstration
 
@@ -155,15 +214,15 @@ Run it with `PYTHONPATH=. uv run python scripts/memory_experiment.py`.
 
 ## Assignment questions
 
-1. **Why check IDs when titles are clearer, and how many memory discrepancies occurred?** Titles can have aliases or translations; the catalog ID is the stable key. Code resolves each returned ID against the candidate catalog. The memory experiment found four discrepancies. See `kino.py:575–583` and `scripts/memory_experiment.py:85–125`.
-2. **What if the model returns an ID outside the catalog?** The ID is recorded as rejected, the result becomes invalid, and no film is printed. See `kino.py:581–583` and `kino.py:532–545`.
+1. **Why check IDs when titles are clearer, and how many memory discrepancies occurred?** Titles can have aliases or translations; the catalog ID is the stable key. Code resolves each returned ID against the candidate catalog. The memory experiment found four discrepancies. See `kino.py:594–614` and `scripts/memory_experiment.py:85–125`.
+2. **What if the model returns an ID outside the catalog?** The ID is recorded as rejected, the result becomes invalid, and no film is printed. See `kino.py:600–601` and `kino.py:551–564`.
 3. **How is a valid response different from a correct recommendation?** A response can parse and contain valid IDs but still miss the expected film. `check.py` compares returned outcomes and IDs with each query’s expectation and counts failures. See `check.py:47–65` and `check.py:118–138`.
-4. **What can a non-ML solution do, and what does it miss here?** Exact rules can filter by year, runtime, language, and genre. They do not infer that “a poor family infiltrating a rich household” describes a film unless the query matches stored metadata or text rules. The current code applies explicit filters in `kino.py:267–299`.
-5. **What did one query cost, and what most affects the price?** In this local run, the model-call journal reports **$0.000000** for 172 calls; the first 62-call run was also $0.000000. The local Qwen path therefore costs $0 per query in model usage. A paid model’s price depends on input and output token counts; a recommendation can use one filter call and a second choice call. See `utils.py:17–21`, `utils.py:51–61`, and `kino.py:471–507`.
+4. **What can a non-ML solution do, and what does it miss here?** Exact rules can filter by year, runtime, language, and genre. They do not infer that “a poor family infiltrating a rich household” describes a film unless the query matches stored metadata or text rules. The current code applies explicit filters in `kino.py:272–304`.
+5. **What did one query cost, and what most affects the price?** The local `qwen3.5:4b` path costs **$0** in model usage; the final journal reports $0 for all 1,249 local calls. The cloud R05 attempt cost **$0.003016** for 98 calls before HTTP 429, with 6 real answers. A paid model’s price depends on input and output token counts; a recommendation can use one filter call and a second choice call. See `utils.py:17–21`, `utils.py:51–61`, and `kino.py:472–516`.
 
 ## Scope and limits
 
-The project claims Common checks `S01`–`S21`, Rare points 1–2, and Legendary points 1 and 4. It does not yet claim `R05`, `L03`, `V00`–`V05`, Epic, or free-text question answering. The local model is useful for a no-paid-model path, but the 83/90 result still includes semantic mismatches. A valid ID and a well-formed response do not prove that the recommendation is correct.
+The project claims Common checks `S01`–`S21`, Rare points 1–2, and Legendary points 1 and 4. `L03` is now backed by the local five-run journal. `R05` remains unclaimed because the cloud attempt hit HTTP 429 under the owner’s 180-call cap. `V00`–`V05`, Epic, and free-text question answering remain outside the claim. The local model is useful for a no-paid-model path, but even the 95.3% five-run report contains semantic mismatches. A valid ID and a well-formed response do not prove that the recommendation is correct.
 
 ## Project documents
 

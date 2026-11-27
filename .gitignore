@@ -8,7 +8,6 @@ state.json
 state.json.tmp
 qa_calls.jsonl
 bot_calls.jsonl
-checks/
 check/
 examples/
 

@@ -80,7 +80,19 @@ def test_system_prompt_asks_to_clarify_a_general_request(
 ) -> None:
     from kino import build_messages
 
-    system = build_messages(catalog, "a quiet film")[0]["content"].lower()
+    system = " ".join(build_messages(catalog, "a quiet film")[0]["content"].lower().split())
     assert "too general" in system
     assert "clarify" in system
     assert "never use no_match for a general request" in system
+    assert "specific but unsupported request" in system
+    assert "the request asks for a film outside the catalog" in system
+
+
+def test_filter_prompt_ignores_injection_as_filter_criteria(
+    catalog: list[dict[str, Any]],
+) -> None:
+    from kino import build_filter_messages
+
+    system = build_filter_messages(catalog, "a film outside the catalog")[0]["content"].lower()
+    assert "do not define filters" in system
+    assert "leave all fields null" in system

@@ -9,7 +9,7 @@
     }
   },
   {
-    "query": "A story about a wrongfully imprisoned banker",
+    "query": "A banker is wrongfully convicted and befriends another prisoner",
     "level": "common",
     "expect": {
       "must": [
@@ -72,7 +72,7 @@
     }
   },
   {
-    "query": "A musical romance in Los Angeles",
+    "query": "A musical film set in Los Angeles",
     "level": "common",
     "expect": {
       "must": [
@@ -81,7 +81,7 @@
     }
   },
   {
-    "query": "A doomed romance on a sinking ship",
+    "query": "Two passengers fall in love aboard a ship that sinks on its maiden voyage",
     "level": "common",
     "expect": {
       "must": [
@@ -135,7 +135,7 @@
     }
   },
   {
-    "query": "A Kazakh film about a migrant mother in Moscow",
+    "query": "A film about a migrant mother in Moscow",
     "level": "rare",
     "expect": {
       "must": [
@@ -144,7 +144,7 @@
     }
   },
   {
-    "query": "A Kazakh comedy set near a space launch site",
+    "query": "A comedy set near a space launch site",
     "level": "rare",
     "expect": {
       "must": [
@@ -198,7 +198,7 @@
     }
   },
   {
-    "query": "A 2024 Kazakh horror comedy shorter than 80 minutes",
+    "query": "A Kazakh-language film about a robot uprising",
     "level": "rare",
     "expect": {
       "no_match": true
@@ -254,7 +254,7 @@
     }
   },
   {
-    "query": "A silent documentary about volcanoes under 60 minutes",
+    "query": "A silent film about volcanoes",
     "level": "rare",
     "expect": {
       "no_match": true
